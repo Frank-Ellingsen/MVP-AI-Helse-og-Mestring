@@ -150,38 +150,37 @@ def populate_demo_erp_data():
             WHERE bilagsnummer IS NULL
         """)
 
-    cursor.execute("SELECT COUNT(*) FROM stg_erp_transactions WHERE bilagsnummer LIKE 'BIL-%'")
-    demo_count = cursor.fetchone()[0]
+    cursor.execute("DELETE FROM stg_erp_transactions WHERE bilagsnummer LIKE 'BIL-%'")
 
-    if demo_count == 0:
-        demo_rows = [
-            ("DEMO_ERP", "BIL-1001", "2026-08-15", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "101000", "Fast lønn", "Ansatt 4012", "Lønnsutbetaling august", 1500000.0, 1520000.0),
-            ("DEMO_ERP", "BIL-1002", "2026-08-18", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "109000", "Overtid", "Ansatt 4012", "Helgedekning overtid", 50000.0, 185000.0),
-            ("DEMO_ERP", "BIL-1003", "2026-08-20", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "110000", "Innleie/Vikarer", "Adecco Helse AS", "Sykefraværsvikarer pleie", 40000.0, 145000.0),
-            ("DEMO_ERP", "BIL-1004", "2026-08-22", "Helse og Mestring", "Hjemmebaserte tjenester", "2580", "Hjemmetjenesten Vågsbygd", "258", "Ambulerende hjemmetjeneste", "101000", "Fast lønn", "Ansatt 5110", "Lønnsutbetaling august", 1200000.0, 1210000.0),
-            ("DEMO_ERP", "BIL-1005", "2026-08-25", "Helse og Mestring", "Hjemmebaserte tjenester", "2580", "Hjemmetjenesten Vågsbygd", "258", "Ambulerende hjemmetjeneste", "109000", "Overtid", "Ansatt 5110", "Ekstraomganger sommer", 30000.0, 110000.0),
-            ("DEMO_ERP", "BIL-1006", "2026-08-28", "Helse og Mestring", "Mestring og helse", "2330", "Mestringsenheten", "233", "Forebyggende helse", "169000", "Refusjoner NAV", "NAV Innkreving", "Sykelønnsrefusjon Q2", -100000.0, -75000.0),
-            ("DEMO_ERP", "BIL-1007", "2026-08-28", "Helse og Mestring", "Mestring og helse", "2330", "Mestringsenheten", "233", "Forebyggende helse", "101000", "Fast lønn", "Ansatt 6020", "Fastlønn august", 850000.0, 840000.0),
-            ("DEMO_ERP", "BIL-1008", "2026-08-28", "Helse og Mestring", "Heldøgns omsorg", "2540", "Strømmehaven", "253", "Pleie i institusjon", "101000", "Fast lønn", "Ansatt 4501", "Fastlønn august", 1400000.0, 1435000.0),
-            ("DEMO_ERP", "BIL-1009", "2026-08-29", "Helse og Mestring", "Heldøgns omsorg", "2540", "Strømmehaven", "253", "Pleie i institusjon", "109000", "Overtid", "Ansatt 4501", "Helgeovertid august", 45000.0, 95000.0),
-        ]
+    demo_rows = [
+        ("DEMO_ERP", "BIL-1001", "2026-08-15", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "101000", "Fast lønn", "Ansatt 4012", "Lønnsutbetaling faste stillinger YTD", 12000000.0, 12150000.0),
+        ("DEMO_ERP", "BIL-1002", "2026-08-18", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "109000", "Overtid", "Ansatt 4012", "Helgedekning og beordret overtid", 400000.0, 1150000.0),
+        ("DEMO_ERP", "BIL-1003", "2026-08-20", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "110000", "Innleie/Vikarer", "Adecco Helse AS", "Sykefraværsvikarer døgnpleie", 300000.0, 850000.0),
+        ("DEMO_ERP", "BIL-1010", "2026-08-21", "Helse og Mestring", "Heldøgns omsorg", "2530", "Randesund Omsorgssenter", "253", "Pleie i institusjon", "169000", "Refusjoner NAV", "NAV Innkreving", "Mottatt sykelønnsrefusjon (etterslep 300k)", -800000.0, -500000.0),
+        ("DEMO_ERP", "BIL-1004", "2026-08-22", "Helse og Mestring", "Hjemmebaserte tjenester", "2580", "Hjemmetjenesten Vågsbygd", "258", "Ambulerende hjemmetjeneste", "101000", "Fast lønn", "Ansatt 5110", "Fastlønn hjemmesykepleie YTD", 9600000.0, 9680000.0),
+        ("DEMO_ERP", "BIL-1005", "2026-08-25", "Helse og Mestring", "Hjemmebaserte tjenester", "2580", "Hjemmetjenesten Vågsbygd", "258", "Ambulerende hjemmetjeneste", "109000", "Overtid", "Ansatt 5110", "Ekstraomganger sommeravvikling", 240000.0, 690000.0),
+        ("DEMO_ERP", "BIL-1006", "2026-08-28", "Helse og Mestring", "Mestring og helse", "2330", "Mestringsenheten", "233", "Forebyggende helse", "169000", "Refusjoner NAV", "NAV Innkreving", "Sykelønnsrefusjon Q2", -400000.0, -460000.0),
+        ("DEMO_ERP", "BIL-1007", "2026-08-28", "Helse og Mestring", "Mestring og helse", "2330", "Mestringsenheten", "233", "Forebyggende helse", "101000", "Fast lønn", "Ansatt 6020", "Fastlønn forebyggende team YTD", 6800000.0, 6690000.0),
+        ("DEMO_ERP", "BIL-1008", "2026-08-28", "Helse og Mestring", "Heldøgns omsorg", "2540", "Strømmehaven", "253", "Pleie i institusjon", "101000", "Fast lønn", "Ansatt 4501", "Fastlønn døgnomsorg YTD", 11200000.0, 11340000.0),
+        ("DEMO_ERP", "BIL-1009", "2026-08-29", "Helse og Mestring", "Heldøgns omsorg", "2540", "Strømmehaven", "253", "Pleie i institusjon", "109000", "Overtid", "Ansatt 4501", "Helgeovertid YTD", 360000.0, 620000.0),
+    ]
 
-        if "source_system" in existing_cols:
-            cursor.executemany("""
-                INSERT INTO stg_erp_transactions (
-                    source_system, bilagsnummer, dato, sektor, kommunalsjef_omrade, ansvar, enhet_navn,
-                    funksjon, funksjon_navn, artskonto, art_navn, leverandor_ansatt, beskrivelse, budsjett, belop
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, demo_rows)
-        else:
-            cursor.executemany("""
-                INSERT INTO stg_erp_transactions (
-                    bilagsnummer, dato, sektor, kommunalsjef_omrade, ansvar, enhet_navn,
-                    funksjon, funksjon_navn, artskonto, art_navn, leverandor_ansatt, beskrivelse, budsjett, belop
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, [r[1:] for r in demo_rows])
+    if "source_system" in existing_cols:
+        cursor.executemany("""
+            INSERT INTO stg_erp_transactions (
+                source_system, bilagsnummer, dato, sektor, kommunalsjef_omrade, ansvar, enhet_navn,
+                funksjon, funksjon_navn, artskonto, art_navn, leverandor_ansatt, beskrivelse, budsjett, belop
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, demo_rows)
+    else:
+        cursor.executemany("""
+            INSERT INTO stg_erp_transactions (
+                bilagsnummer, dato, sektor, kommunalsjef_omrade, ansvar, enhet_navn,
+                funksjon, funksjon_navn, artskonto, art_navn, leverandor_ansatt, beskrivelse, budsjett, belop
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, [r[1:] for r in demo_rows])
 
-        print("  [OK] Satte inn demo ERP-transaksjoner for test.")
+    print("  [OK] Synkroniserte YTD M8 ERP-transaksjoner for test.")
 
     conn.commit()
     conn.close()

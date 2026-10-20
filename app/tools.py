@@ -391,9 +391,17 @@ def generate_monthly_unit_report(
             ]
             df = pd.DataFrame(mock_data)
 
+        # Periodiser YTD-tallene proporsjonalt dersom valgt måned avviker fra referansemåned M8
+        scale_factor = mnd / 8.0 if mnd != 8 else 1.0
+        if scale_factor != 1.0:
+            df["hittil_budsjett"] = (df["hittil_budsjett"] * scale_factor).round(2)
+            df["hittil_forbruk"] = (df["hittil_forbruk"] * scale_factor).round(2)
+            df["avvik_kr"] = (df["hittil_forbruk"] - df["hittil_budsjett"]).round(2)
+
         total_forbruk = float(df["hittil_forbruk"].sum())
         total_budsjett = float(df["hittil_budsjett"].sum())
         total_avvik = float(df["avvik_kr"].sum())
+        cpi = round(total_budsjett / total_forbruk, 2) if total_forbruk > 0 else 1.0
 
         rag_status = (
             "🔴 RED (Kritisk merforbruk)"
@@ -416,6 +424,7 @@ def generate_monthly_unit_report(
                 "totalt_hittil_budsjett": total_budsjett,
                 "totalt_hittil_forbruk": total_forbruk,
                 "totalt_avvik_kr": total_avvik,
+                "cpi": cpi,
                 "rag_status": rag_status,
             },
             "artsoppstilling": df.to_dict(orient="records"),
@@ -452,7 +461,9 @@ def calculate_eoy_prescriptive_forecast(
     avvik_hittil = forbruk - forventet_lineaer_forbruk
 
     eoy_prognose = (forbruk / mnd_passert) * 12
+    etc_gjenstaende = eoy_prognose - forbruk
     eoy_avvik = eoy_prognose - budsjett
+    cpi = round(forventet_lineaer_forbruk / forbruk, 2) if forbruk > 0 else 1.0
 
     anbefalte_tiltak = []
     if eoy_avvik > 0:
@@ -489,8 +500,10 @@ def calculate_eoy_prescriptive_forecast(
         "hittil_forbruk": forbruk,
         "arsbudsjett": budsjett,
         "avvik_hittil": round(avvik_hittil, 2),
+        "etc_gjenstaende": round(etc_gjenstaende, 2),
         "eoy_prognose": round(eoy_prognose, 2),
         "forventet_eoy_avvik": round(eoy_avvik, 2),
+        "cpi": cpi,
         "status": "MERFORBRUK (Fare for ubalanse)" if eoy_avvik > 0 else "I BALANSE",
         "anbefalte_preskriptive_tiltak": anbefalte_tiltak,
     }
@@ -521,9 +534,11 @@ def calculate_next_year_salary_budget(
 
     grunnlonn_totalt = fte * snittlonn_fte
     tillegg_totalt = grunnlonn_totalt * (tillegg / 100)
+    sosiale_totalt = (grunnlonn_totalt + tillegg_totalt) * (arbeidsgiveravgift_pensjon - 1.0)
     subtotal = (grunnlonn_totalt + tillegg_totalt) * arbeidsgiveravgift_pensjon
 
-    neste_ar_budsjett = subtotal * (1 + (deflator / 100))
+    deflator_paslag = subtotal * (deflator / 100)
+    neste_ar_budsjett = subtotal + deflator_paslag
 
     uid = user_ctx.user_id if user_ctx else "user_session"
     role = user_ctx.role if user_ctx else "direktor"
@@ -540,8 +555,11 @@ def calculate_next_year_salary_budget(
         "antall_fte": fte,
         "beregnet_grunnlonn": round(grunnlonn_totalt, 2),
         "beregnet_tillegg": round(tillegg_totalt, 2),
+        "beregnet_sosiale_utgifter": round(sosiale_totalt, 2),
+        "beregnet_deflator_paslag": round(deflator_paslag, 2),
         "neste_ar_lonnsbudsjett_inkl_aga_pensjon_og_deflator": round(neste_ar_budsjett, 2),
         "deflator_benyttet": f"{deflator}%",
+        "ubekvemstillegg_benyttet": f"{tillegg}%",
     }
     return json.dumps(res, ensure_ascii=False, indent=2)
 

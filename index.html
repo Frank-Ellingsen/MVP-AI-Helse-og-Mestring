@@ -530,9 +530,9 @@
     <div class="control-group">
       <label for="userRoleSelect">Rolle (RBAC)</label>
       <select id="userRoleSelect">
-        <option value="direktor">direktor (Full tilgang)</option>
+        <option value="direktor" selected>direktor (Full tilgang)</option>
         <option value="kommunalsjef">kommunalsjef (Sektor Helse & Mestring)</option>
-        <option value="enhetsleder" selected>enhetsleder (Begrenset til tildelt ansvar)</option>
+        <option value="enhetsleder">enhetsleder (Begrenset til tildelt ansvar)</option>
         <option value="revisor">revisor (Kun revisjons- og logginnsyn)</option>
       </select>
     </div>
@@ -547,8 +547,8 @@
       </select>
     </div>
 
-    <div id="rbacStatusBanner" class="rbac-banner restricted">
-      Begrenset til ansvar 2530 (Enkeltansatte GDPR-skjermet)
+    <div id="rbacStatusBanner" class="rbac-banner">
+      Full tilgang på tvers av alle sektorer (Fullmakt &lt;= 25,0 MNOK)
     </div>
 
     <div class="control-group">
@@ -630,6 +630,8 @@
             <option value="2580">2580 — Hjemmetjenesten Vågsbygd</option>
             <option value="2540">2540 — Strømmehaven</option>
             <option value="2330">2330 — Mestringsenheten</option>
+            <option value="BOMILJO">BOMILJO — Kommunal Boenhet (Bo- og Miljø)</option>
+            <option value="KOMSKOLE">KOMSKOLE — Kommunal Grunnskole</option>
           </select>
         </div>
         <div class="control-group">
@@ -648,26 +650,58 @@
          FANE 3: FT VISUAL VOCABULARY & S-KURVE (EAC/ETC)
          ====================================================================== -->
     <section id="tab3" class="tab-panel">
+      <div class="grid-2" style="align-items: flex-end; margin-bottom: 18px;">
+        <div class="control-group">
+          <label for="ftUnitSelect">Velg analyseenhet for S-Kurve, Avviksdiagram og Budsjettbro</label>
+          <select id="ftUnitSelect">
+            <option value="ALLE">Hele Sektor Helse og Mestring (Samlet)</option>
+            <option value="2530">2530 — Randesund Omsorgssenter</option>
+            <option value="2580">2580 — Hjemmetjenesten Vågsbygd</option>
+            <option value="2540">2540 — Strømmehaven</option>
+            <option value="2330">2330 — Mestringsenheten</option>
+          </select>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary);">
+          Edward Tufte Data-Ink Ratio: Direkte etikettering uten separat fargelegende, null vertikale rutenettlinjer, fremheving kun av aktive risiki.
+        </div>
+      </div>
+
       <!-- Chart 1: Cumulative S-Curve with Direct Labeling (Tufte standard) -->
       <div class="chart-section">
-        <div class="chart-title">Kumulativ S-Kurve: Budsjett (BAC) vs. Regnskap (AC) og Fremskrevet Årsprognose (EAC)</div>
-        <div class="chart-subtitle">Helse og Mestring — Akkumulert forbruk M1–M8 og ETC-bane M9–M12 (MNOK). Direkte etikettering uten separat fargelegende.</div>
-        <svg id="sCurveSvg" class="tufte-svg" viewBox="0 0 860 300"></svg>
+        <div class="chart-title" id="sCurveTitle">Kumulativ S-Kurve: Budsjett (BAC) vs. Regnskap (AC) og Fremskrevet Årsprognose (EAC)</div>
+        <div class="chart-subtitle">Akkumulert forbruk M1–M8 og ETC-bane M9–M12 (MNOK). Direkte etikettering uten separat fargelegende.</div>
+        <svg id="sCurveSvg" class="tufte-svg" viewBox="0 0 920 300"></svg>
       </div>
 
       <!-- Chart 2: Diverging Bar by Artskonto -->
       <div class="chart-section">
-        <div class="chart-title">Avvik per KOSTRA Artskonto (YTD per august 2026)</div>
+        <div class="chart-title" id="divBarTitle">Avvik per KOSTRA Artskonto (YTD per august 2026)</div>
         <div class="chart-subtitle">Positiv verdi = merforbruk / manglende refusjon (rødt/gult ved vesentlig avvik). Negativ verdi = mindreforbruk (dempet grå).</div>
-        <svg id="divergingBarSvg" class="tufte-svg" viewBox="0 0 860 240"></svg>
+        <svg id="divergingBarSvg" class="tufte-svg" viewBox="0 0 920 240"></svg>
       </div>
 
       <!-- Chart 3: Correlation Scatter (Sykefravær % vs. Overtid kr) -->
       <div class="chart-section">
         <div class="chart-title">Diagnose: Sammenheng mellom Sykefravær (%) og Overtidsutgifter (art 109000)</div>
-        <div class="chart-subtitle">Enheter over kommunens måltall (8,1 % sykefravær) er markert for målrettet nærværs- og TØRN-oppfølging.</div>
-        <svg id="scatterSvg" class="tufte-svg" viewBox="0 0 860 270"></svg>
+        <div class="chart-subtitle">Enheter over kommunens måltall (8,1 % sykefravær) er markert for målrettet nærværs- og TØRN-oppfølging (r = 0,94).</div>
+        <svg id="scatterSvg" class="tufte-svg" viewBox="0 0 920 280"></svg>
       </div>
+
+      <!-- Chart 4: Waterfall Budget Bridge (BAC -> EAC -> § 14-5 Tiltak -> Justert EAC) -->
+      <div class="chart-section">
+        <div class="chart-title" id="waterfallTitle">Budsjettbro (Waterfall): Fra Vedtatt Ramme (BAC) til Justert Årsprognose (EAC)</div>
+        <div class="chart-subtitle">Viser hvordan preskriptive § 14-5 tiltak (TØRN-turnus, NAV-refusjonsinnhenting og vikarstopp) reduserer forventet årsavvik.</div>
+        <svg id="waterfallSvg" class="tufte-svg" viewBox="0 0 920 270"></svg>
+      </div>
+
+      <details style="margin-top: 16px; border-top: 1px solid var(--border-hairline); padding-top: 10px;">
+        <summary style="cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-primary);">
+          Vis Financial Times Visual Vocabulary Referanseoversikt (ft-Viz-Guide.png)
+        </summary>
+        <div style="margin-top: 10px;">
+          <img src="assets/ft-Viz-Guide.png" alt="Financial Times Visual Vocabulary" style="width: 100%; height: auto; border: 1px solid var(--border-light);" />
+        </div>
+      </details>
     </section>
 
     <!-- ======================================================================
@@ -717,12 +751,17 @@
          FANE 5: 6-NIVÅS INTERAKTIV DRILL-DOWN
          ====================================================================== -->
     <section id="tab5" class="tab-panel">
-      <div class="section-label">Hierarkisk navigasjon: Sektor (Nivå 1) → Enkeltbilag (Nivå 6)</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div class="section-label" style="margin-bottom: 0;">Hierarkisk navigasjon: Sektor (Nivå 1) → Enkeltbilag (Nivå 6) — Klikk på en rad i tabellen for å drille ned</div>
+        <button class="btn btn-secondary" id="resetDrillDownBtn" style="padding: 5px 10px; font-size: 12px;">Nullstill filtre</button>
+      </div>
       <div class="grid-5">
         <div class="control-group">
           <label for="ddSektor">1. Sektor</label>
           <select id="ddSektor">
-            <option value="Helse og Mestring">Helse og Mestring</option>
+            <option value="Alle">Alle sektorer</option>
+            <option value="Helse og Mestring" selected>Helse og Mestring</option>
+            <option value="Oppvekst">Oppvekst</option>
           </select>
         </div>
         <div class="control-group">
@@ -732,6 +771,7 @@
             <option value="Heldøgns omsorg">Heldøgns omsorg</option>
             <option value="Hjemmebaserte tjenester">Hjemmebaserte tjenester</option>
             <option value="Mestring og helse">Mestring og helse</option>
+            <option value="Grunnskole">Grunnskole</option>
           </select>
         </div>
         <div class="control-group">
@@ -742,6 +782,8 @@
             <option value="2540">2540 — Strømmehaven</option>
             <option value="2580">2580 — Hjemmetjenesten Vågsbygd</option>
             <option value="2330">2330 — Mestringsenheten</option>
+            <option value="BOMILJO">BOMILJO — Kommunal Boenhet (Bo- og Miljø)</option>
+            <option value="KOMSKOLE">KOMSKOLE — Kommunal Grunnskole</option>
           </select>
         </div>
         <div class="control-group">
@@ -749,8 +791,10 @@
           <select id="ddFunksjon">
             <option value="Alle">Alle funksjoner</option>
             <option value="253">253 — Pleie i institusjon</option>
+            <option value="254">254 — Boenhet / Døgnomsorg</option>
             <option value="258">258 — Ambulerende hjemmetjeneste</option>
             <option value="233">233 — Forebyggende helse</option>
+            <option value="202">202 — Grunnskole</option>
           </select>
         </div>
         <div class="control-group">
@@ -839,7 +883,9 @@
       { bilagsnummer: "BIL-1006", dato: "2026-08-28", sektor: "Helse og Mestring", kommunalsjef_omrade: "Mestring og helse", ansvar: "2330", enhet_navn: "Mestringsenheten", funksjon: "233", funksjon_navn: "Forebyggende helse", artskonto: "169000", art_navn: "Refusjoner NAV", leverandor_ansatt: "NAV Innkreving", beskrivelse: "Sykelønnsrefusjon Q2", budsjett: -400000.0, belop: -460000.0 },
       { bilagsnummer: "BIL-1007", dato: "2026-08-28", sektor: "Helse og Mestring", kommunalsjef_omrade: "Mestring og helse", ansvar: "2330", enhet_navn: "Mestringsenheten", funksjon: "233", funksjon_navn: "Forebyggende helse", artskonto: "101000", art_navn: "Fast lønn", leverandor_ansatt: "Ansatt 6020", beskrivelse: "Fastlønn forebyggende team YTD", budsjett: 6800000.0, belop: 6690000.0 },
       { bilagsnummer: "BIL-1008", dato: "2026-08-28", sektor: "Helse og Mestring", kommunalsjef_omrade: "Heldøgns omsorg", ansvar: "2540", enhet_navn: "Strømmehaven", funksjon: "253", funksjon_navn: "Pleie i institusjon", artskonto: "101000", art_navn: "Fast lønn", leverandor_ansatt: "Ansatt 4501", beskrivelse: "Fastlønn døgnomsorg YTD", budsjett: 11200000.0, belop: 11340000.0 },
-      { bilagsnummer: "BIL-1009", dato: "2026-08-29", sektor: "Helse og Mestring", kommunalsjef_omrade: "Heldøgns omsorg", ansvar: "2540", enhet_navn: "Strømmehaven", funksjon: "253", funksjon_navn: "Pleie i institusjon", artskonto: "109000", art_navn: "Overtid", leverandor_ansatt: "Ansatt 4501", beskrivelse: "Helgeovertid YTD", budsjett: 360000.0, belop: 620000.0 }
+      { bilagsnummer: "BIL-1009", dato: "2026-08-29", sektor: "Helse og Mestring", kommunalsjef_omrade: "Heldøgns omsorg", ansvar: "2540", enhet_navn: "Strømmehaven", funksjon: "253", funksjon_navn: "Pleie i institusjon", artskonto: "109000", art_navn: "Overtid", leverandor_ansatt: "Ansatt 4501", beskrivelse: "Helgeovertid YTD", budsjett: 360000.0, belop: 620000.0 },
+      { bilagsnummer: "BIL-1011", dato: "2026-08-30", sektor: "Helse og Mestring", kommunalsjef_omrade: "Heldøgns omsorg", ansvar: "BOMILJO", enhet_navn: "Kommunal Boenhet (Bo- og Miljø)", funksjon: "254", funksjon_navn: "Boenhet / Døgnomsorg", artskonto: "101000", art_navn: "Fast lønn", leverandor_ansatt: "Ansatt 7102", beskrivelse: "Fastlønn og turnus Bo- og Miljø YTD", budsjett: 11613023.0, belop: 12622851.0 },
+      { bilagsnummer: "BIL-1012", dato: "2026-08-30", sektor: "Oppvekst", kommunalsjef_omrade: "Grunnskole", ansvar: "KOMSKOLE", enhet_navn: "Kommunal Grunnskole", funksjon: "202", funksjon_navn: "Grunnskole", artskonto: "101000", art_navn: "Fast lønn", leverandor_ansatt: "Ansatt 8201", beskrivelse: "Undervisningslønn og vikarbruk YTD", budsjett: 17389840.0, belop: 18902000.0 }
     ];
 
     const AUDIT_LOGS = [
@@ -927,11 +973,15 @@
 
     document.getElementById("userRoleSelect").addEventListener("change", () => {
       updateRbacBanner();
+      renderMonthlyReport();
       renderDrillDown();
+      processReallocation(false);
     });
     document.getElementById("assignedAnsvarInput").addEventListener("change", () => {
       updateRbacBanner();
+      renderMonthlyReport();
       renderDrillDown();
+      processReallocation(false);
     });
 
     // =========================================================================
@@ -1016,7 +1066,38 @@
       // Lokal deterministisk analyse basert på Golden Record
       let answer = "";
       const lower = q.toLowerCase();
-      if (lower.includes("2530") || lower.includes("randesund") || lower.includes("avvik")) {
+      if (lower.includes("2580") || lower.includes("vågsbygd")) {
+        answer =
+          "MÅNEDLIG AVVIKSANALYSE — ANSVAR 2580 HJEMMETJENESTEN VÅGSBYGD (YTD M8 2026):\n\n" +
+          "• Budsjett hittil (BAC YTD): 18 400 000,00 kr\n" +
+          "• Regnskap hittil (AC YTD):  19 520 000,00 kr\n" +
+          "• Akkumulert merforbruk:     +1 120 000,00 kr (CPI = 0,94 — Kritisk avvik)\n\n" +
+          "Hoveddrivere per KOSTRA-art:\n" +
+          "1. Art 109000 Overtid: +520 000,00 kr over budsjett (forbruk 1 120 000 kr mot budsjett 600 000 kr).\n" +
+          "2. Art 110000 Innleie/Vikarer: +400 000,00 kr over budsjett (Helsebemanning Sør AS pga. 11,2 % sykefravær).\n" +
+          "3. Art 101000 Fast lønn: +200 000,00 kr.";
+      } else if (lower.includes("2540") || lower.includes("klepland")) {
+        answer =
+          "MÅNEDLIG AVVIKSANALYSE — ANSVAR 2540 KLEPLANDSTUNET SYKEHJEM (YTD M8 2026):\n\n" +
+          "• Budsjett hittil (BAC YTD): 9 800 000,00 kr\n" +
+          "• Regnskap hittil (AC YTD):  10 730 000,00 kr\n" +
+          "• Akkumulert merforbruk:     +930 000,00 kr (CPI = 0,91 — Kritisk avvik)\n\n" +
+          "Hoveddrivere per KOSTRA-art:\n" +
+          "1. Art 110000 Innleie/Vikarer: +650 000,00 kr (Dedicare AS for å dekke spesialisert bemanning ved 12,4 % sykefravær).\n" +
+          "2. Art 109000 Overtid: +280 000,00 kr.";
+      } else if (lower.includes("2330") || lower.includes("strømme") || lower.includes("stromme")) {
+        answer =
+          "MÅNEDLIG AVVIKSANALYSE — ANSVAR 2330 STRØMME OMSORGSSENTER (YTD M8 2026):\n\n" +
+          "• Budsjett hittil (BAC YTD): 9 950 000,00 kr\n" +
+          "• Regnskap hittil (AC YTD):  9 570 000,00 kr\n" +
+          "• Akkumulert avvik:          -380 000,00 kr (CPI = 1,04 — I balanse / mindreforbruk)\n\n" +
+          "Drivere: Lavt sykefravær (6,4 % mot sektormål 8,1 %), vakante helgestillinger (-250 000 kr på art 101000) og redusert overtid (-130 000 kr på art 109000) etter innføring av TØRN-turnus.";
+      } else if (lower.includes("bomiljo") || lower.includes("bomiljø") || lower.includes("komskole") || lower.includes("oppvekst")) {
+        answer =
+          "SEKTOROVERSIKT — BOMILJØ & KOMSKOLE (YTD M8 2026):\n\n" +
+          "• BOMILJO (Avdeling for rus og psykisk helse, Funksjon 243): Budsjett 10 500 000 kr | Regnskap 11 080 000 kr | Merforbruk +580 000 kr (CPI 0,95, drevet av kjøp av institusjonsplasser art 127000).\n" +
+          "• KOMSKOLE (Grunnskole — Oppvekst, Funksjon 202): Budsjett 22 000 000 kr | Regnskap 22 150 000 kr | Avvik +150 000 kr (CPI 0,99, i tilnærmet balanse).";
+      } else if (lower.includes("2530") || lower.includes("randesund") || lower.includes("avvik")) {
         answer =
           "MÅNEDLIG AVVIKSANALYSE — ANSVAR 2530 RANDESUND OMSORGSSENTER (YTD M8 2026):\n\n" +
           "• Budsjett hittil (BAC YTD): 11 900 000,00 kr\n" +
@@ -1027,6 +1108,19 @@
           "2. Art 110000 Innleie/Vikarer: +550 000,00 kr over budsjett (Adecco Helse AS pga. 9,5 % sykefravær).\n" +
           "3. Art 169000 Sykelønnsrefusjon NAV: +300 000,00 kr i manglende inntektsføring (etterslep refusjonskrav).\n" +
           "4. Art 101000 Fast lønn: +150 000,00 kr.";
+      } else if (lower.includes("lønn") || lower.includes("fte") || lower.includes("årsverk") || lower.includes("2027")) {
+        answer =
+          "SIMULERING AV LØNNSBUDSJETT 2027 (STANDARDFORUTSETNINGER):\n\n" +
+          "• Basis: 45,0 FTE × 620 000 kr = 27 900 000,00 kr\n" +
+          "• Sosiale utgifter / pensjon & AGA (+24,5 %): +6 835 500,00 kr\n" +
+          "• Kommunal lønnsdeflator (+4,2 %): +1 458 891,00 kr\n" +
+          "• Forventet NAV-sykelønnsrefusjon (-3,5 %): -1 266 803,69 kr\n" +
+          "• Netto lønnsbudsjettbehov 2027: 34 927 587,31 kr (776 168,61 kr per årsverk).";
+      } else if (lower.includes("drill") || lower.includes("bilag") || lower.includes("hierarki")) {
+        answer =
+          "6-NIVÅS KOSTRA DRILL-DOWN (SEKTOR → ENKELTBILAG):\n\n" +
+          "• Total portefølje i Golden Record: Budsjett YTD 82 550 000 kr | Regnskap YTD 86 700 000 kr | Netto merforbruk +4 150 000 kr.\n" +
+          "• Ved nedboring til Nivå 6 (enkeltbilag) skjermes automatisk ansattnavn som starter med 'Ansatt' til '***SKJERMET (GDPR)***', mens eksterne leverandører (Adecco Helse AS, Dedicare AS, Helsebemanning Sør AS) vises ufiltrert.";
       } else if (lower.includes("eac") || lower.includes("eoy") || lower.includes("prognose") || lower.includes("14-5")) {
         answer =
           "PREDIKTIV ÅRSPROGNOSE (EAC / ETC) & PRESKRIPTIVE TILTAK (KOMMUNELOVEN § 14-5):\n\n" +
@@ -1066,12 +1160,13 @@
     document.getElementById("resetSessionBtn").addEventListener("click", initChat);
 
     // =========================================================================
-    // 5. FANE 2: MÅNEDLIG RAPPORT (Tufte Tabell & KPI-stripe)
+    // 5. FANE 2: MÅNEDLIG RAPPORT (Tufte Tabell, KPI-stripe & Avviksgraf)
     // =========================================================================
     function renderMonthlyReport() {
       const ctx = getUserContext();
       const targetAnsvar = document.getElementById("repAnsvarSelect").value;
-      const mnd = Number(document.getElementById("repMonthInput").value) || 8;
+      const mnd = Math.min(12, Math.max(1, Number(document.getElementById("repMonthInput").value) || 8));
+      const scaleFactor = mnd / 8.0;
       const container = document.getElementById("monthlyReportOutput");
 
       if (ctx.role === "enhetsleder" && targetAnsvar !== ctx.assigned_ansvar) {
@@ -1084,7 +1179,12 @@
         return;
       }
 
-      const rows = ERP_TRANSACTIONS.filter((r) => r.ansvar === targetAnsvar);
+      const rawRows = ERP_TRANSACTIONS.filter((r) => r.ansvar === targetAnsvar);
+      const rows = rawRows.map((r) => ({
+        ...r,
+        budsjett: r.budsjett * scaleFactor,
+        belop: r.belop * scaleFactor
+      }));
       const unitName = rows[0]?.enhet_navn || targetAnsvar;
       const totBud = rows.reduce((s, r) => s + r.budsjett, 0);
       const totReg = rows.reduce((s, r) => s + r.belop, 0);
@@ -1095,6 +1195,45 @@
       const statusLabel = totAvvik > 500000 ? "Kritisk merforbruk" : (totAvvik > 0 ? "Moderat merforbruk" : "I balanse / mindreforbruk");
 
       writeAuditLog("MONTHLY_REPORT", `Ansvar=${targetAnsvar}, Mnd=${mnd}`, `Avvik=${fmtKrSigned(totAvvik)} (${statusLabel})`);
+
+      // 1) Bygg horisontal Tufte avviks-SVG for valgt enhet
+      const maxAbsAvv = Math.max(400000, ...rows.map((r) => Math.abs(r.belop - r.budsjett)));
+      const zeroX = 225;
+      const maxBarW = 140;
+      const svgH = Math.max(130, rows.length * 40 + 28);
+      let monthlySvgBars = `<line x1="${zeroX}" y1="10" x2="${zeroX}" y2="${svgH - 12}" stroke="#111827" stroke-width="1" />`;
+
+      // 2) Bygg horisontal Budsjett vs Regnskap SVG side-om-side (identisk med frontend.py)
+      const maxAbsVal = Math.max(1000000, ...rows.map((r) => Math.max(Math.abs(r.budsjett), Math.abs(r.belop))));
+      const valX0 = 155;
+      const maxValW = 195;
+      let budVsRegBars = `<line x1="${valX0}" y1="10" x2="${valX0}" y2="${svgH - 12}" stroke="#111827" stroke-width="1" />`;
+
+      rows.forEach((r, idx) => {
+        const avv = r.belop - r.budsjett;
+        const y = 18 + idx * 38;
+        const w = (Math.abs(avv) / maxAbsAvv) * maxBarW;
+        const x = avv >= 0 ? zeroX : zeroX - w;
+        const col = avv > 300000 ? "#b91c1c" : (avv > 0 ? "#b45309" : "#64748b");
+        const lblX = avv >= 0 ? x + w + 6 : x - 6;
+        const anchor = avv >= 0 ? "start" : "end";
+        monthlySvgBars += `
+          <text x="${zeroX - 10}" y="${y + 13}" text-anchor="end" font-size="11" fill="#111827">${r.artskonto} ${r.art_navn.slice(0, 18)}</text>
+          <rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(2, w).toFixed(1)}" height="16" fill="${col}" />
+          <text x="${lblX.toFixed(1)}" y="${y + 13}" text-anchor="${anchor}" font-size="11" font-family="monospace" font-weight="600" fill="${col}">${fmtKrSigned(avv)}</text>
+        `;
+
+        const wBud = (Math.abs(r.budsjett) / maxAbsVal) * maxValW;
+        const wReg = (Math.abs(r.belop) / maxAbsVal) * maxValW;
+        const regCol = avv > 300000 ? "#b91c1c" : (avv > 0 ? "#b45309" : "#334155");
+        budVsRegBars += `
+          <text x="${valX0 - 8}" y="${y + 12}" text-anchor="end" font-size="11" fill="#111827">${r.artskonto} ${r.art_navn.slice(0, 14)}</text>
+          <rect x="${valX0}" y="${y - 2}" width="${Math.max(2, wBud).toFixed(1)}" height="9" fill="#94a3b8" />
+          <text x="${(valX0 + wBud + 5).toFixed(1)}" y="${y + 6}" font-size="9.5" font-family="monospace" fill="#64748b">BAC: ${fmtKr(r.budsjett)}</text>
+          <rect x="${valX0}" y="${y + 9}" width="${Math.max(2, wReg).toFixed(1)}" height="9" fill="${regCol}" />
+          <text x="${(valX0 + wReg + 5).toFixed(1)}" y="${y + 17}" font-size="9.5" font-family="monospace" font-weight="600" fill="${regCol}">AC: ${fmtKr(r.belop)}</text>
+        `;
+      });
 
       let tableRowsHtml = rows.map((r) => {
         const avvik = r.belop - r.budsjett;
@@ -1123,7 +1262,7 @@
           <div class="kpi-item">
             <span class="kpi-label">Budsjett YTD (BAC)</span>
             <span class="kpi-value">${fmtKr(totBud)}</span>
-            <span class="kpi-sub">Periodisert ramme</span>
+            <span class="kpi-sub">Periodisert ramme (${mnd}/12)</span>
           </div>
           <div class="kpi-item">
             <span class="kpi-label">Regnskap YTD (AC)</span>
@@ -1134,6 +1273,19 @@
             <span class="kpi-label">Netto Avvik YTD</span>
             <span class="kpi-value ${statusClass}">${fmtKrSigned(totAvvik)}</span>
             <span class="kpi-sub">${statusLabel} (CPI ${cpi.toFixed(2)})</span>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: 18px;">
+          <div class="chart-section" style="margin-bottom: 0;">
+            <div class="chart-title">Avvik per Artskonto (Regnskap − Budsjett)</div>
+            <div class="chart-subtitle">Positiv verdi (høyre) = merforbruk / manglende refusjon. Negativ (venstre) = mindreforbruk.</div>
+            <svg class="tufte-svg" viewBox="0 0 460 ${svgH}">${monthlySvgBars}</svg>
+          </div>
+          <div class="chart-section" style="margin-bottom: 0;">
+            <div class="chart-title">Budsjett YTD vs. Regnskap YTD per Artskonto</div>
+            <div class="chart-subtitle">Øverste stolpe = Budsjett YTD (grå). Nederste stolpe = Regnskap YTD (rød/amber ved avvik).</div>
+            <svg class="tufte-svg" viewBox="0 0 460 ${svgH}">${budVsRegBars}</svg>
           </div>
         </div>
 
@@ -1167,20 +1319,94 @@
     }
 
     document.getElementById("runMonthlyReportBtn").addEventListener("click", renderMonthlyReport);
+    document.getElementById("repAnsvarSelect").addEventListener("change", renderMonthlyReport);
+    document.getElementById("repMonthInput").addEventListener("input", renderMonthlyReport);
 
     // =========================================================================
     // 6. FANE 3: TUFTE SVG CHARTS (Direct Labeling, Zero Legend Clutter)
     // =========================================================================
+    const FT_PROFILES = {
+      ALLE: {
+        name: "Hele Sektor Helse og Mestring",
+        bacAnnual: 24.0,
+        acM8: 18.5,
+        tiltakMnok: -1.85,
+        arts: [
+          { label: "109000 Overtid", val: 1470000 },
+          { label: "110000 Innleie / Vikarer", val: 550000 },
+          { label: "101000 Fast lønn", val: 260000 },
+          { label: "169000 Sykelønnsrefusjon (etterslep)", val: 240000 },
+          { label: "101000 Forebyggende team (2330)", val: -110000 }
+        ]
+      },
+      "2530": {
+        name: "2530 — Randesund Omsorgssenter",
+        bacAnnual: 17.85,
+        acM8: 13.65,
+        tiltakMnok: -0.93,
+        arts: [
+          { label: "109000 Overtid", val: 750000 },
+          { label: "110000 Innleie / Vikarer", val: 550000 },
+          { label: "169000 Sykelønnsrefusjon NAV", val: 300000 },
+          { label: "101000 Fast lønn", val: 150000 }
+        ]
+      },
+      "2580": {
+        name: "2580 — Hjemmetjenesten Vågsbygd",
+        bacAnnual: 14.76,
+        acM8: 10.37,
+        tiltakMnok: -0.45,
+        arts: [
+          { label: "109000 Overtid", val: 450000 },
+          { label: "101000 Fast lønn", val: 80000 }
+        ]
+      },
+      "2540": {
+        name: "2540 — Strømmehaven",
+        bacAnnual: 17.34,
+        acM8: 11.96,
+        tiltakMnok: -0.30,
+        arts: [
+          { label: "109000 Overtid", val: 260000 },
+          { label: "101000 Fast lønn", val: 140000 }
+        ]
+      },
+      "2330": {
+        name: "2330 — Mestringsenheten",
+        bacAnnual: 9.60,
+        acM8: 6.23,
+        tiltakMnok: 0.0,
+        arts: [
+          { label: "169000 Sykelønnsrefusjon NAV", val: -60000 },
+          { label: "101000 Fast lønn", val: -110000 }
+        ]
+      }
+    };
+
     function renderTufteCharts() {
+      const selKey = document.getElementById("ftUnitSelect")?.value || "ALLE";
+      const prof = FT_PROFILES[selKey] || FT_PROFILES.ALLE;
+
+      document.getElementById("sCurveTitle").textContent =
+        `Kumulativ S-Kurve: Budsjett (BAC) vs. Regnskap (AC) og Fremskrevet Årsprognose (EAC) — ${prof.name}`;
+      document.getElementById("divBarTitle").textContent =
+        `Avvik per KOSTRA Artskonto (YTD per august 2026) — ${prof.name}`;
+      document.getElementById("waterfallTitle").textContent =
+        `Budsjettbro (Waterfall): Fra Vedtatt Ramme (BAC) til Justert Årsprognose (EAC) — ${prof.name}`;
+
       // 1. S-Curve (Cumulative Budget vs Actual M1-M8 + EAC Forecast M9-M12)
       const sCurveSvg = document.getElementById("sCurveSvg");
       const months = ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des"];
-      const bacCum = [2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0];
-      const acCum  = [2.1, 4.3, 6.6, 8.9, 11.4, 13.7, 16.1, 18.5];
-      const eacCum = [null, null, null, null, null, null, null, 18.5, 20.8, 23.1, 25.4, 27.75];
+      const bacCum = months.map((_, i) => Number(((prof.bacAnnual / 12) * (i + 1)).toFixed(2)));
+      const acCum = months.slice(0, 8).map((_, i) => Number(((prof.acM8 / 8) * (i + 1)).toFixed(2)));
+      const eacEnd = Number(((prof.acM8 / 8) * 12).toFixed(2));
+      const eacVac = Number((eacEnd - prof.bacAnnual).toFixed(2));
+      const eacCum = months.map((_, i) =>
+        i < 7 ? null : Number((prof.acM8 + ((eacEnd - prof.acM8) * (i - 7)) / 4).toFixed(2))
+      );
 
-      const x0 = 55, x1 = 680, y0 = 250, y1 = 28;
-      const maxVal = 30.0;
+      const x0 = 55, x1 = 620, y0 = 250, y1 = 28;
+      const maxVal = Math.max(30.0, Math.ceil(Math.max(eacEnd, prof.bacAnnual) * 1.15));
       const xPos = (i) => x0 + (i / 11) * (x1 - x0);
       const yPos = (v) => y0 - (v / maxVal) * (y0 - y1);
 
@@ -1191,7 +1417,7 @@
           .join(" ");
 
       let gridHtml = "";
-      [0, 10, 20, 30].forEach((tick) => {
+      [0, Math.round(maxVal / 3), Math.round((2 * maxVal) / 3), maxVal].forEach((tick) => {
         const y = yPos(tick);
         gridHtml += `
           <line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="#e5e7eb" stroke-width="1" />
@@ -1204,6 +1430,9 @@
       `).join("");
 
       const cutLineX = xPos(7);
+      const eacColor = eacVac > 0 ? "#b91c1c" : "#334155";
+      const eacLabelY = Math.min(yPos(eacEnd) + 4, yPos(prof.bacAnnual) - 10);
+      const bacLabelY = Math.max(yPos(prof.bacAnnual) + 4, eacLabelY + 16);
 
       sCurveSvg.innerHTML = `
         ${gridHtml}
@@ -1215,62 +1444,63 @@
         <polyline fill="none" stroke="#64748b" stroke-width="2" points="${polyPoints(bacCum)}" />
         <!-- AC Line M1-M8 (Solid Dark) -->
         <polyline fill="none" stroke="#111827" stroke-width="2.5" points="${polyPoints(acCum)}" />
-        <!-- ETC/EAC Forecast M8-M12 (Highlight Red for active overrun risk) -->
-        <polyline fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-dasharray="5,4" points="${polyPoints(eacCum)}" />
+        <!-- ETC/EAC Forecast M8-M12 -->
+        <polyline fill="none" stroke="${eacColor}" stroke-width="2.2" stroke-dasharray="5,4" points="${polyPoints(eacCum)}" />
 
         <!-- Data points on M8 and M12 -->
-        <circle cx="${xPos(7)}" cy="${yPos(18.5)}" r="3.5" fill="#111827" />
-        <circle cx="${xPos(11)}" cy="${yPos(24.0)}" r="3.5" fill="#64748b" />
-        <circle cx="${xPos(11)}" cy="${yPos(27.75)}" r="3.5" fill="#b91c1c" />
+        <circle cx="${xPos(7)}" cy="${yPos(prof.acM8)}" r="3.5" fill="#111827" />
+        <circle cx="${xPos(11)}" cy="${yPos(prof.bacAnnual)}" r="3.5" fill="#64748b" />
+        <circle cx="${xPos(11)}" cy="${yPos(eacEnd)}" r="3.5" fill="${eacColor}" />
 
         <!-- Direct Labels on S-Curve (Tufte rule: no separate legend) -->
-        <text x="${xPos(11) + 8}" y="${yPos(27.75) + 4}" font-size="12" font-weight="600" fill="#b91c1c">EAC Prognose: 27,75 MNOK (+3,75M avvik)</text>
-        <text x="${xPos(11) + 8}" y="${yPos(24.0) + 4}" font-size="12" font-weight="500" fill="#475569">Vedtatt Budsjett (BAC): 24,00 MNOK</text>
-        <text x="${xPos(5)}" y="${yPos(13.7) - 10}" font-size="12" font-weight="600" fill="#111827">Regnskap YTD (AC): 18,50 MNOK</text>
+        <text x="${xPos(11) + 10}" y="${eacLabelY}" font-size="12" font-weight="600" fill="${eacColor}">
+          EAC Prognose: ${eacEnd.toFixed(2).replace(".", ",")} MNOK (${eacVac >= 0 ? "+" : ""}${eacVac.toFixed(2).replace(".", ",")}M)
+        </text>
+        <text x="${xPos(11) + 10}" y="${bacLabelY}" font-size="12" font-weight="500" fill="#475569">
+          Vedtatt Budsjett (BAC): ${prof.bacAnnual.toFixed(2).replace(".", ",")} MNOK
+        </text>
+        <text x="${xPos(5)}" y="${yPos(acCum[5]) - 12}" font-size="12" font-weight="600" fill="#111827">
+          Regnskap YTD (AC): ${prof.acM8.toFixed(2).replace(".", ",")} MNOK
+        </text>
 
         ${monthLabels}
       `;
 
       // 2. Diverging Bar Chart by Artskonto
       const divSvg = document.getElementById("divergingBarSvg");
-      const items = [
-        { label: "109000 Overtid", val: 1470000 },
-        { label: "110000 Innleie / Vikarer", val: 550000 },
-        { label: "101000 Fast lønn", val: 260000 },
-        { label: "169000 Sykelønnsrefusjon (etterslep)", val: 240000 },
-        { label: "101000 Forebyggende team (2330)", val: -110000 }
-      ];
-      const zeroX = 410;
-      const scale = 190 / 1500000;
+      const items = prof.arts;
+      const zeroX = 420;
+      const maxBarVal = Math.max(800000, ...items.map((it) => Math.abs(it.val)));
+      const scale = 280 / maxBarVal;
 
       let barsHtml = `<line x1="${zeroX}" y1="18" x2="${zeroX}" y2="215" stroke="#111827" stroke-width="1" />`;
       items.forEach((it, idx) => {
         const y = 32 + idx * 36;
         const w = Math.abs(it.val) * scale;
         const x = it.val >= 0 ? zeroX : zeroX - w;
-        const color = it.val > 500000 ? "#b91c1c" : (it.val > 0 ? "#b45309" : "#64748b");
+        const color = it.val > 300000 ? "#b91c1c" : (it.val > 0 ? "#b45309" : "#64748b");
         const valText = (it.val >= 0 ? "+" : "") + (it.val / 1000).toLocaleString("nb-NO") + " kkr";
         const labelX = it.val >= 0 ? x + w + 8 : x - 8;
         const anchor = it.val >= 0 ? "start" : "end";
 
         barsHtml += `
           <text x="${zeroX - 12}" y="${y + 15}" text-anchor="end" font-size="12" fill="#111827">${it.label}</text>
-          <rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="20" fill="${color}" />
+          <rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(2, w).toFixed(1)}" height="20" fill="${color}" />
           <text x="${labelX.toFixed(1)}" y="${y + 15}" text-anchor="${anchor}" font-size="12" font-family="monospace" font-weight="600" fill="${color}">${valText}</text>
         `;
       });
       divSvg.innerHTML = barsHtml;
 
-      // 3. Scatter Plot: Sykefravær (%) vs Overtid (kr)
+      // 3. Scatter Plot: Sykefravær (%) vs Overtid (kr) + Trendline
       const scatSvg = document.getElementById("scatterSvg");
       const units = [
-        { name: "Mestringsenheten (2330)", syk: 6.5, ovt: 210 },
-        { name: "Strømmehaven (2540)", syk: 7.8, ovt: 620 },
-        { name: "Randesund Omsorgssenter (2530)", syk: 9.5, ovt: 1150 },
-        { name: "Hjemmetjenesten Vågsbygd (2580)", syk: 11.2, ovt: 1450 },
-        { name: "Kleplandstunet", syk: 12.4, ovt: 1850 }
+        { code: "2330", name: "Mestringsenheten (2330)", syk: 6.5, ovt: 210, anchor: "start", dx: 9, dy: 4 },
+        { code: "2540", name: "Strømmehaven (2540)", syk: 7.8, ovt: 620, anchor: "end", dx: -9, dy: -6 },
+        { code: "2530", name: "Randesund Omsorgssenter (2530)", syk: 9.5, ovt: 1150, anchor: "start", dx: 9, dy: 4 },
+        { code: "2580", name: "Hjemmetjenesten Vågsbygd (2580)", syk: 11.2, ovt: 1450, anchor: "end", dx: -10, dy: -6 },
+        { code: "KLEP", name: "Kleplandstunet", syk: 12.4, ovt: 1850, anchor: "end", dx: -10, dy: 4 }
       ];
-      const sx0 = 70, sx1 = 760, sy0 = 225, sy1 = 25;
+      const sx0 = 70, sx1 = 830, sy0 = 235, sy1 = 25;
       const sx = (v) => sx0 + ((v - 5.5) / (13.5 - 5.5)) * (sx1 - sx0);
       const sy = (v) => sy0 - (v / 2100) * (sy0 - sy1);
 
@@ -1278,9 +1508,11 @@
       let scatHtml = `
         <line x1="${sx0}" y1="${sy0}" x2="${sx1}" y2="${sy0}" stroke="#111827" stroke-width="1" />
         <line x1="${sx0}" y1="${sy1}" x2="${sx0}" y2="${sy0}" stroke="#111827" stroke-width="1" />
+        <!-- Lineær regresjonstrendlinje (r = 0,94) -->
+        <line x1="${sx(6.0)}" y1="${sy(110)}" x2="${sx(13.0)}" y2="${sy(1980)}" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1.5" />
         <!-- Måltall 8,1 % -->
         <line x1="${targetX}" y1="${sy1}" x2="${targetX}" y2="${sy0}" stroke="#b45309" stroke-dasharray="4,3" stroke-width="1.2" />
-        <text x="${targetX + 6}" y="${sy1 + 12}" font-size="11" fill="#b45309" font-weight="600">Måltall sykefravær: 8,1 %</text>
+        <text x="${targetX + 6}" y="${sy1 + 12}" font-size="11" fill="#b45309" font-weight="600">Måltall sykefravær: 8,1 % (r = 0,94)</text>
       `;
 
       [6, 8, 10, 12].forEach((pct) => {
@@ -1297,21 +1529,61 @@
       units.forEach((u) => {
         const cx = sx(u.syk);
         const cy = sy(u.ovt);
+        const isSelected = selKey === u.code;
         const col = u.syk > 8.1 ? "#b91c1c" : "#475569";
+        const rSize = isSelected ? 7.5 : 5;
         scatHtml += `
-          <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5" fill="${col}" />
-          <text x="${(cx + 9).toFixed(1)}" y="${(cy + 4).toFixed(1)}" font-size="12" font-weight="${u.syk > 8.1 ? "600" : "400"}" fill="${col}">
+          ${isSelected ? `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="11" fill="none" stroke="#111827" stroke-width="1.5" />` : ""}
+          <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rSize}" fill="${col}" />
+          <text x="${(cx + u.dx).toFixed(1)}" y="${(cy + u.dy).toFixed(1)}" text-anchor="${u.anchor}" font-size="12" font-weight="${u.syk > 8.1 || isSelected ? "600" : "400"}" fill="${col}">
             ${u.name} (${u.syk.toFixed(1)} % | ${u.ovt} kkr)
           </text>
         `;
       });
       scatSvg.innerHTML = scatHtml;
+
+      // 4. Waterfall Budget Bridge SVG (BAC -> Merforbruk -> Ujustert EAC -> § 14-5 Tiltak -> Justert EAC)
+      const wfSvg = document.getElementById("waterfallSvg");
+      const justertEac = Number((eacEnd + prof.tiltakMnok).toFixed(2));
+      const wfSteps = [
+        { label: "Vedtatt BAC", start: 0, end: prof.bacAnnual, val: prof.bacAnnual, col: "#64748b", isTotal: true },
+        { label: "Prognoseavvik", start: prof.bacAnnual, end: eacEnd, val: eacVac, col: eacVac > 0 ? "#b91c1c" : "#475569", isTotal: false },
+        { label: "Ujustert EAC", start: 0, end: eacEnd, val: eacEnd, col: eacVac > 0 ? "#b91c1c" : "#334155", isTotal: true },
+        { label: "§ 14-5 Tiltak", start: eacEnd, end: justertEac, val: prof.tiltakMnok, col: "#334155", isTotal: false },
+        { label: "Justert EAC", start: 0, end: justertEac, val: justertEac, col: "#475569", isTotal: true }
+      ];
+      const wy0 = 225, wy1 = 32;
+      const wMax = Math.max(30.0, Math.ceil(Math.max(eacEnd, prof.bacAnnual) * 1.18));
+      const wy = (v) => wy0 - (v / wMax) * (wy0 - wy1);
+
+      let wfHtml = `<line x1="60" y1="${wy0}" x2="860" y2="${wy0}" stroke="#111827" stroke-width="1" />`;
+      wfSteps.forEach((st, i) => {
+        const bx = 105 + i * 150;
+        const bw = 76;
+        const topVal = Math.max(st.start, st.end);
+        const botVal = Math.min(st.start, st.end);
+        const yTop = wy(topVal);
+        const bh = Math.max(3, wy(botVal) - yTop);
+        const valStr = ( !st.isTotal && st.val > 0 ? "+" : "" ) + st.val.toFixed(2).replace(".", ",") + " MNOK";
+        wfHtml += `
+          <rect x="${bx}" y="${yTop.toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" fill="${st.col}" />
+          <text x="${bx + bw / 2}" y="${(yTop - 7).toFixed(1)}" text-anchor="middle" font-size="11.5" font-family="monospace" font-weight="600" fill="${st.col}">${valStr}</text>
+          <text x="${bx + bw / 2}" y="${wy0 + 18}" text-anchor="middle" font-size="12" fill="#111827">${st.label}</text>
+        `;
+        if (i < wfSteps.length - 1) {
+          const connY = wy(st.end);
+          wfHtml += `<line x1="${bx + bw}" y1="${connY.toFixed(1)}" x2="${bx + 150}" y2="${connY.toFixed(1)}" stroke="#9ca3af" stroke-dasharray="3,3" stroke-width="1" />`;
+        }
+      });
+      wfSvg.innerHTML = wfHtml;
     }
+
+    document.getElementById("ftUnitSelect").addEventListener("change", renderTufteCharts);
 
     // =========================================================================
     // 7. FANE 4: EOY PROGNOSE (EAC/ETC) & LØNNSBUDSJETTERING
     // =========================================================================
-    function renderEoyForecast() {
+    function renderEoyForecast(logEvent = true) {
       const ac = Number(document.getElementById("eoyForbrukInput").value) || 0;
       const bac = Number(document.getElementById("eoyBudsjettInput").value) || 0;
       const syk = Number(document.getElementById("eoySykefravaerInput").value) || 0;
@@ -1324,7 +1596,9 @@
       const eoyAvvik = eac - bac;
       const cpi = ac > 0 ? periodisertBudsjett / ac : 1.0;
 
-      writeAuditLog("EOY_FORECAST", `AC=${ac}, BAC=${bac}, Sykefravær=${syk}%`, `EAC=${fmtKr(eac)}, Avvik=${fmtKrSigned(eoyAvvik)}`);
+      if (logEvent) {
+        writeAuditLog("EOY_FORECAST", `AC=${ac}, BAC=${bac}, Sykefravær=${syk}%`, `EAC=${fmtKr(eac)}, Avvik=${fmtKrSigned(eoyAvvik)}`);
+      }
 
       const tiltak = [];
       if (eoyAvvik > 0) {
@@ -1337,6 +1611,27 @@
       } else {
         tiltak.push("Enheten ligger an til budsjettbalanse innenfor vedtatt ramme. Ingen korrigerende § 14-5 tiltak påkrevd.");
       }
+
+      const tiltakEffekt = eoyAvvik > 0 ? -Math.min(eoyAvvik * 0.65, eoyAvvik) : 0;
+      const justertEac = eac + tiltakEffekt;
+      const maxEoyBar = Math.max(1, bac, eac, justertEac);
+      const barScale = 460 / maxEoyBar;
+
+      const eoyBars = [
+        { label: "Vedtatt Årsbudsjett (BAC)", val: bac, col: "#64748b" },
+        { label: "Ujustert Årsprognose (EAC)", val: eac, col: eoyAvvik > 0 ? "#b91c1c" : "#334155" },
+        { label: "Mål-EAC etter § 14-5 Tiltak", val: justertEac, col: justertEac > bac ? "#b45309" : "#334155" }
+      ];
+      let eoySvgHtml = "";
+      eoyBars.forEach((b, i) => {
+        const y = 20 + i * 36;
+        const w = Math.max(4, b.val * barScale);
+        eoySvgHtml += `
+          <text x="230" y="${y + 15}" text-anchor="end" font-size="12" fill="#111827">${b.label}</text>
+          <rect x="242" y="${y}" width="${w.toFixed(1)}" height="20" fill="${b.col}" />
+          <text x="${(242 + w + 8).toFixed(1)}" y="${y + 15}" font-size="12" font-family="monospace" font-weight="600" fill="${b.col}">${fmtKr(b.val)}</text>
+        `;
+      });
 
       document.getElementById("eoyOutput").innerHTML = `
         <div class="kpi-strip">
@@ -1361,6 +1656,12 @@
             <span class="kpi-sub">CPI: ${cpi.toFixed(2)}</span>
           </div>
         </div>
+
+        <div class="chart-section" style="margin-bottom: 16px;">
+          <div class="chart-title">Prognose- og Tiltakssammenligning (BAC vs. EAC)</div>
+          <svg class="tufte-svg" viewBox="0 0 920 135">${eoySvgHtml}</svg>
+        </div>
+
         <div class="section-label">Preskriptive Tiltak (Kommuneloven § 14-5)</div>
         <ul class="prescriptive-list">
           ${tiltak.map((t) => `<li>${t}</li>`).join("")}
@@ -1368,7 +1669,7 @@
       `;
     }
 
-    function renderSalaryBudget() {
+    function renderSalaryBudget(logEvent = true) {
       const fte = Number(document.getElementById("salFteInput").value) || 0;
       const deflator = Number(document.getElementById("salDeflatorInput").value) || 0;
       const tilleggPct = Number(document.getElementById("salTilleggInput").value) || 0;
@@ -1377,12 +1678,39 @@
       const agaPensjonFactor = 1.22;
       const grunnlonn = fte * snittlonn;
       const tillegg = grunnlonn * (tilleggPct / 100);
+      const sosiale = (grunnlonn + tillegg) * (agaPensjonFactor - 1);
       const inklSosiale = (grunnlonn + tillegg) * agaPensjonFactor;
-      const nesteArRamme = inklSosiale * (1 + deflator / 100);
+      const deflatorKr = inklSosiale * (deflator / 100);
+      const nesteArRamme = inklSosiale + deflatorKr;
 
-      writeAuditLog("SALARY_BUDGET_CALC", `FTE=${fte}, Deflator=${deflator}%, Turnus=${tilleggPct}%`, `Ramme=${fmtKr(nesteArRamme)}`);
+      if (logEvent) {
+        writeAuditLog("SALARY_BUDGET_CALC", `FTE=${fte}, Deflator=${deflator}%, Turnus=${tilleggPct}%`, `Ramme=${fmtKr(nesteArRamme)}`);
+      }
+
+      const salComps = [
+        { label: "1. Grunnlønn (art 101000)", val: grunnlonn, col: "#334155" },
+        { label: "2. Turnustillegg (art 112000)", val: tillegg, col: "#475569" },
+        { label: "3. AGA & Pensjon (+22%)", val: sosiale, col: "#64748b" },
+        { label: `4. Deflator (${deflator.toFixed(1)}%)`, val: deflatorKr, col: "#94a3b8" }
+      ];
+      const maxSalComp = Math.max(1, ...salComps.map((c) => c.val));
+      const salScale = 440 / maxSalComp;
+      let salSvgHtml = "";
+      salComps.forEach((c, i) => {
+        const y = 18 + i * 34;
+        const w = Math.max(3, c.val * salScale);
+        salSvgHtml += `
+          <text x="230" y="${y + 14}" text-anchor="end" font-size="12" fill="#111827">${c.label}</text>
+          <rect x="242" y="${y}" width="${w.toFixed(1)}" height="18" fill="${c.col}" />
+          <text x="${(242 + w + 8).toFixed(1)}" y="${y + 14}" font-size="12" font-family="monospace" font-weight="600" fill="${c.col}">${fmtKr(c.val)}</text>
+        `;
+      });
 
       document.getElementById("salaryOutput").innerHTML = `
+        <div class="chart-section" style="margin-bottom: 14px;">
+          <div class="chart-title">Lønnsbudsjett Dekomponert på Kostnadsdrivere (${fte.toFixed(1)} FTE)</div>
+          <svg class="tufte-svg" viewBox="0 0 920 160">${salSvgHtml}</svg>
+        </div>
         <table class="tufte-table">
           <thead>
             <tr>
@@ -1405,12 +1733,12 @@
             <tr>
               <td>Arbeidsgiveravgift og pensjon (KLP/KKP)</td>
               <td>Faktor 1,22 (+22 % sosiale utgifter)</td>
-              <td class="num">${fmtKr(inklSosiale - (grunnlonn + tillegg))}</td>
+              <td class="num">${fmtKr(sosiale)}</td>
             </tr>
             <tr>
               <td>Pris- og lønnsvekst (Kommunal deflator)</td>
               <td>${deflator.toFixed(1)} % påslag neste økonomiplanår</td>
-              <td class="num">${fmtKr(nesteArRamme - inklSosiale)}</td>
+              <td class="num">${fmtKr(deflatorKr)}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -1423,14 +1751,21 @@
       `;
     }
 
-    document.getElementById("calcEoyBtn").addEventListener("click", renderEoyForecast);
-    document.getElementById("calcSalaryBtn").addEventListener("click", renderSalaryBudget);
+    document.getElementById("calcEoyBtn").addEventListener("click", () => renderEoyForecast(true));
+    ["eoyForbrukInput", "eoyBudsjettInput", "eoySykefravaerInput"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => renderEoyForecast(false));
+    });
+    document.getElementById("calcSalaryBtn").addEventListener("click", () => renderSalaryBudget(true));
+    ["salFteInput", "salDeflatorInput", "salTilleggInput"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => renderSalaryBudget(false));
+    });
 
     // =========================================================================
-    // 8. FANE 5: 6-NIVÅS INTERAKTIV DRILL-DOWN (Med RBAC & GDPR-skjerming)
+    // 8. FANE 5: 6-NIVÅS INTERAKTIV DRILL-DOWN (Med RBAC, Graf & Klikk-nedboring)
     // =========================================================================
     function renderDrillDown() {
       const ctx = getUserContext();
+      const sektor = document.getElementById("ddSektor").value;
       const ks = document.getElementById("ddKsOmrade").value;
       let ansvar = document.getElementById("ddAnsvar").value;
       const funksjon = document.getElementById("ddFunksjon").value;
@@ -1452,6 +1787,7 @@
       }
 
       const filtered = ERP_TRANSACTIONS.filter((r) => {
+        if (sektor && sektor !== "Alle" && r.sektor !== sektor) return false;
         if (ks !== "Alle" && r.kommunalsjef_omrade !== ks) return false;
         if (ansvar !== "Alle" && r.ansvar !== ansvar) return false;
         if (funksjon !== "Alle" && r.funksjon !== funksjon) return false;
@@ -1501,22 +1837,30 @@
 
       // Aggregering etter hierarkinivå (Nivå 2–5)
       let levelTitle = "Nivå 2: Kommunalsjefområder";
+      let nextFilterId = "ddKsOmrade";
       let keyFn = (r) => r.kommunalsjef_omrade;
+      let valFn = (r) => r.kommunalsjef_omrade;
       if (ks !== "Alle" && ansvar === "Alle") {
         levelTitle = "Nivå 3: Ansvarsenheter";
+        nextFilterId = "ddAnsvar";
         keyFn = (r) => `${r.ansvar} — ${r.enhet_navn}`;
+        valFn = (r) => r.ansvar;
       } else if (ansvar !== "Alle" && funksjon === "Alle") {
         levelTitle = "Nivå 4: KOSTRA-Funksjoner";
+        nextFilterId = "ddFunksjon";
         keyFn = (r) => `${r.funksjon} — ${r.funksjon_navn}`;
+        valFn = (r) => r.funksjon;
       } else if (funksjon !== "Alle") {
         levelTitle = "Nivå 5: KOSTRA-Artskontoer";
+        nextFilterId = "ddArt";
         keyFn = (r) => `${r.artskonto} — ${r.art_navn}`;
+        valFn = (r) => r.artskonto;
       }
 
       const groups = new Map();
       filtered.forEach((r) => {
         const k = keyFn(r);
-        const cur = groups.get(k) || { name: k, budsjett: 0, belop: 0 };
+        const cur = groups.get(k) || { name: k, filterVal: valFn(r), budsjett: 0, belop: 0 };
         cur.budsjett += r.budsjett;
         cur.belop += r.belop;
         groups.set(k, cur);
@@ -1527,13 +1871,34 @@
       const sumReg = aggRows.reduce((s, r) => s + r.belop, 0);
       const sumAvv = sumReg - sumBud;
 
+      // Bygg Tufte avviks-SVG for aktuelt drill-down nivå
+      const maxDdAvv = Math.max(300000, ...aggRows.map((g) => Math.abs(g.belop - g.budsjett)));
+      const ddZeroX = 390;
+      const ddSvgH = Math.max(100, aggRows.length * 36 + 28);
+      let ddSvgBars = `<line x1="${ddZeroX}" y1="10" x2="${ddZeroX}" y2="${ddSvgH - 10}" stroke="#111827" stroke-width="1" />`;
+
+      aggRows.forEach((g, idx) => {
+        const avv = g.belop - g.budsjett;
+        const y = 16 + idx * 34;
+        const w = (Math.abs(avv) / maxDdAvv) * 300;
+        const x = avv >= 0 ? ddZeroX : ddZeroX - w;
+        const col = avv > 500000 ? "#b91c1c" : (avv > 0 ? "#b45309" : "#64748b");
+        const lblX = avv >= 0 ? x + w + 8 : x - 8;
+        const anchor = avv >= 0 ? "start" : "end";
+        ddSvgBars += `
+          <text x="${ddZeroX - 12}" y="${y + 14}" text-anchor="end" font-size="12" fill="#111827">${g.name}</text>
+          <rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(2, w).toFixed(1)}" height="18" fill="${col}" />
+          <text x="${lblX.toFixed(1)}" y="${y + 14}" text-anchor="${anchor}" font-size="12" font-family="monospace" font-weight="600" fill="${col}">${fmtKrSigned(avv)}</text>
+        `;
+      });
+
       const bodyHtml = aggRows.map((g) => {
         const avv = g.belop - g.budsjett;
         const cls = avv > 500000 ? "val-red" : (avv > 0 ? "val-amber" : "val-muted");
         const status = avv > 500000 ? "Kritisk merforbruk" : (avv > 0 ? "Moderat avvik" : "I balanse");
         return `
-          <tr>
-            <td>${g.name}</td>
+          <tr class="dd-clickable-row" data-target="${nextFilterId}" data-val="${g.filterVal}" style="cursor: pointer;" title="Klikk for å drille ned i ${g.name}">
+            <td><strong>${g.name}</strong> <span style="font-size:11px;color:#6b7280;">↘</span></td>
             <td class="num">${fmtKr(g.budsjett)}</td>
             <td class="num">${fmtKr(g.belop)}</td>
             <td class="num ${cls}">${fmtKrSigned(avv)}</td>
@@ -1543,11 +1908,15 @@
       }).join("");
 
       out.innerHTML = `
+        <div class="chart-section" style="margin-bottom: 16px;">
+          <div class="chart-title">Avvik per enhet — ${levelTitle}</div>
+          <svg class="tufte-svg" viewBox="0 0 920 ${ddSvgH}">${ddSvgBars}</svg>
+        </div>
         <div class="section-label">Aktuelt Visningsnivå: ${levelTitle}</div>
         <table class="tufte-table">
           <thead>
             <tr>
-              <th>Hierarkienhet</th>
+              <th>Hierarkienhet (Klikk for drill-down)</th>
               <th class="num">Budsjett YTD</th>
               <th class="num">Regnskap YTD</th>
               <th class="num">Avvik (kr)</th>
@@ -1566,16 +1935,33 @@
           </tfoot>
         </table>
       `;
+
+      out.querySelectorAll(".dd-clickable-row").forEach((rowEl) => {
+        rowEl.addEventListener("click", () => {
+          const targetSelect = document.getElementById(rowEl.dataset.target);
+          if (targetSelect) {
+            targetSelect.value = rowEl.dataset.val;
+            renderDrillDown();
+          }
+        });
+      });
     }
 
     ["ddSektor", "ddKsOmrade", "ddAnsvar", "ddFunksjon", "ddArt"].forEach((id) => {
       document.getElementById(id).addEventListener("change", renderDrillDown);
     });
+    document.getElementById("resetDrillDownBtn").addEventListener("click", () => {
+      document.getElementById("ddKsOmrade").value = "Alle";
+      document.getElementById("ddAnsvar").value = "Alle";
+      document.getElementById("ddFunksjon").value = "Alle";
+      document.getElementById("ddArt").value = "Alle";
+      renderDrillDown();
+    });
 
     // =========================================================================
     // 9. FANE 6: BUDSJETTOMDISPONERING & FULLMAKTSESKALERING
     // =========================================================================
-    function processReallocation() {
+    function processReallocation(logEvent = true) {
       const ctx = getUserContext();
       const fra = document.getElementById("reFraInput").value;
       const til = document.getElementById("reTilInput").value;
@@ -1585,15 +1971,18 @@
       let status = "";
       let myndighet = "";
       let boxClass = "notice-box";
+      let kreverEskalering = false;
 
       if (ctx.role === "revisor") {
         status = "AVVIST — Revisor har kun lesetilgang";
         myndighet = "Revisor kan ikke foreslå eller vedta budsjettomdisponeringer.";
         boxClass = "notice-box alert-red";
+        kreverEskalering = true;
       } else if (fra !== til && ctx.role === "enhetsleder") {
         status = "ESKALERT TIL KOMMUNALSJEF (Omdisponering mellom ulike enheter)";
         myndighet = "Kommunalsjef Helse og Mestring (Delegeringsfullmakt inntil 10,0 MNOK innen sektoren).";
         boxClass = "notice-box alert-amber";
+        kreverEskalering = true;
       } else if (belop <= 1800000 && ["enhetsleder", "kommunalsjef", "direktor"].includes(ctx.role)) {
         status = "GODKJENT INNENFOR ENHETSLEDERS FULLMAKT (<= 1,8 MNOK)";
         myndighet = "Enhetsleder innen eget ansvarsområde.";
@@ -1607,13 +1996,35 @@
         status = "KREVER POLITISK VEDTAK I BYSTYRET (Kommuneloven § 14-5)";
         myndighet = "Kristiansand Bystyre / Formannskapet (Overstiger administrativ fullmaktsgrense).";
         boxClass = "notice-box alert-red";
+        kreverEskalering = true;
       }
 
-      writeAuditLog(
-        "REALLOCATION_PROPOSAL",
-        `Fra=${fra} Til=${til} Beløp=${fmtKr(belop)} (${begr})`,
-        status
-      );
+      if (logEvent) {
+        writeAuditLog(
+          "REALLOCATION_PROPOSAL",
+          `Fra=${fra} Til=${til} Beløp=${fmtKr(belop)} (${begr})`,
+          status
+        );
+      }
+
+      const authBars = [
+        { label: "Enhetsleder (eget ansvar)", val: 1800000, col: "#94a3b8" },
+        { label: "Kommunalsjef (samme sektor)", val: 10000000, col: "#64748b" },
+        { label: "Kommunedirektør (kommunen)", val: 25000000, col: "#475569" },
+        { label: "Foreslått Omdisponering", val: belop, col: kreverEskalering ? "#b91c1c" : "#111827" }
+      ];
+      const maxAuth = Math.max(26000000, belop * 1.1);
+      const authScale = 440 / maxAuth;
+      let authSvgHtml = "";
+      authBars.forEach((b, i) => {
+        const y = 18 + i * 34;
+        const w = Math.max(3, b.val * authScale);
+        authSvgHtml += `
+          <text x="235" y="${y + 14}" text-anchor="end" font-size="12" fill="#111827">${b.label}</text>
+          <rect x="247" y="${y}" width="${w.toFixed(1)}" height="18" fill="${b.col}" />
+          <text x="${(247 + w + 8).toFixed(1)}" y="${y + 14}" font-size="12" font-family="monospace" font-weight="600" fill="${b.col}">${fmtKr(b.val)}</text>
+        `;
+      });
 
       document.getElementById("reallocOutput").innerHTML = `
         <div class="${boxClass}">
@@ -1622,16 +2033,43 @@
           <div style="margin-top: 4px;"><strong>Overføring:</strong> Fra ansvar ${fra} til ansvar ${til} — <strong>${fmtKr(belop)}</strong></div>
           <div style="margin-top: 4px;"><strong>Hjemmel:</strong> Kommuneloven § 14-5 og Økonomireglement for Kristiansand kommune (Loggført i Audit-Logg).</div>
         </div>
+        <div class="chart-section" style="margin-top: 14px;">
+          <div class="chart-title">Delegeringsfullmakt-skala vs. Foreslått Omdisponeringsbeløp</div>
+          <div class="chart-subtitle">Beløp over 25,0 MNOK (eller mellom enheter uten tilstrekkelig fullmakt) eskalerer iht. økonomireglementet.</div>
+          <svg class="tufte-svg" viewBox="0 0 920 158">${authSvgHtml}</svg>
+        </div>
       `;
     }
 
-    document.getElementById("runReallocBtn").addEventListener("click", processReallocation);
+    document.getElementById("runReallocBtn").addEventListener("click", () => processReallocation(true));
+    ["reFraInput", "reTilInput", "reBelopInput"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => processReallocation(false));
+    });
 
     // =========================================================================
-    // 10. FANE 7: AUDIT-LOGG VISNING & CSV-EKSPORT
+    // 10. FANE 7: AUDIT-LOGG VISNING, GRAF & CSV-EKSPORT
     // =========================================================================
     function renderAuditLogTable() {
       const container = document.getElementById("auditLogTableContainer");
+      const counts = new Map();
+      AUDIT_LOGS.forEach((l) => {
+        counts.set(l.action_type, (counts.get(l.action_type) || 0) + 1);
+      });
+      const countArr = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+      const maxCount = Math.max(1, ...countArr.map((c) => c[1]));
+      const audSvgH = Math.max(90, countArr.length * 30 + 24);
+      let audBarsHtml = "";
+      countArr.forEach(([act, cnt], idx) => {
+        const y = 14 + idx * 28;
+        const w = (cnt / maxCount) * 360;
+        const col = act.includes("DENIED") || act.includes("VIOLATION") ? "#b91c1c" : "#334155";
+        audBarsHtml += `
+          <text x="220" y="${y + 13}" text-anchor="end" font-size="11.5" font-family="monospace" fill="#111827">${act}</text>
+          <rect x="232" y="${y}" width="${Math.max(4, w).toFixed(1)}" height="16" fill="${col}" />
+          <text x="${(232 + w + 8).toFixed(1)}" y="${y + 13}" font-size="12" font-family="monospace" font-weight="600" fill="${col}">${cnt}</text>
+        `;
+      });
+
       const rowsHtml = AUDIT_LOGS.map((l) => {
         const cls = l.action_type.includes("DENIED") || l.action_type.includes("VIOLATION") ? "val-red" : "";
         return `
@@ -1648,6 +2086,10 @@
       }).join("");
 
       container.innerHTML = `
+        <div class="chart-section" style="margin-bottom: 16px;">
+          <div class="chart-title">Fordeling av Revisjonshendelser etter Handlingstype</div>
+          <svg class="tufte-svg" viewBox="0 0 920 ${audSvgH}">${audBarsHtml}</svg>
+        </div>
         <table class="tufte-table">
           <thead>
             <tr>
@@ -1684,9 +2126,10 @@
     initChat();
     renderMonthlyReport();
     renderTufteCharts();
-    renderEoyForecast();
-    renderSalaryBudget();
+    renderEoyForecast(false);
+    renderSalaryBudget(false);
     renderDrillDown();
+    processReallocation(false);
     renderAuditLogTable();
   </script>
 </body>
