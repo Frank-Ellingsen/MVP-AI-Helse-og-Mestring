@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  krs-kommune-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: krs_kommune_ai_mvp
+    ports:
+      - "8501:8501"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SERPER_API_KEY=${SERPER_API_KEY}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

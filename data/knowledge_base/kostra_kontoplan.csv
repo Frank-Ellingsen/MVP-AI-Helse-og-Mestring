@@ -1,0 +1,143 @@
+﻿Dimensjon;Niva_1_Kode;Niva_1_Navn;Niva_2_Kode;Niva_2_Navn;Niva_3_Kode;Niva_3_Navn;Beskrivelse_Regnskapsregel
+Kontoklasse;1;Driftsregnskap;1;Driftsregnskap;1;Driftsregnskap;Løpende inntekter og utgifter til kommunal service og drift Jf. Kommuneloven § 14-9
+Kontoklasse;2;Investeringsregnskap;2;Investeringsregnskap;2;Investeringsregnskap;Varige formuesobjekter, nybygg, anlegg og store oppgraderinger
+Kontoklasse;3;Balanseregnskap;3;Balanseregnskap;3;Balanseregnskap;Eiendeler, egenkapital og kortsiktig/langsiktig gjeld per 31.12
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;100;Politisk styring;1000;Bystyre, formannskap og utvalg;Godtgjørelse, møter og sekretariat for folkevalgte organer
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;110;Kontroll og revisjon;1100;Kommunerevisjon og kontrollutvalg;Lovpålagt revisjon og kontrollutvalgssekretariat
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;120;Administrasjon og virksomhetsstyring;1200;Kommunedirektør og sentrale stabsfunksjoner;Økonomistyring, HR, IT, kommunikasjon og juridisk tjeneste
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;121;Forvaltningsutgifter i eiendomsforvaltningen;1210;Eiendomsstyring og formålsbygg;Overordnet styring av kommunal eiendomsmasse
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;130;Administrasjonslokaler;1300;Rådhus og administrative bygg;Drift, strøm og renhold av rådhus og forvaltningsbygg
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;170;Premieavvik og premiefond;1700;Påløpt og amortisert premieavvik;Regnskapsmessig korreksjon av pensjonspremie jf. forskrift
+Funksjon;HF1;Sentrale styringsorganer og administrasjon;180;Diverse fellesutgifter;1800;Felles kontingenter og forsikringer;Sentralavtaler, fellesforikringer og fellesavsetninger
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;201;Barnehager;2010;Kommunale barnehager;Drift av kommunale barnehager og pedagogisk bemanning
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;202;Grunnskoleopplæring;2020;Grunnskoler (1.-10. trinn);Undervisning, lærere, skolebøker og ordinær skoledrift
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;211;Skolefritidstilbud (SFO);2110;Skolefritidsordning;SFO-bemanning, opphold og aktiviteter etter skoletid
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;213;Voksenopplæring og leirskole;2130;Voksenopplæringssenter;Norskundervisning, grunnskole for voksne og leirskoleopphold
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;215;Skoleskyss;2150;Skoleskyss grunnskole;Skyss for elever med lang vei eller skade/funksjonshemming
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;221;Pedagogisk-psykologisk tjeneste (PPT);2210;PPT og oppfølgingstjeneste;Sakkyndig vurdering og rådgivning for barn med særskilte behov
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;222;Skolelokaler og skoleanlegg;2220;Drift av skolebygg og uteanlegg;Forvaltning, drift og vedlikehold av skolebygninger
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;231;Barnevernstjeneste;2310;Saksbehandling og undersøkelser i barnevernet;Mottak av bekymringsmeldinger, undersøkelser og tiltaksplaner
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;232;Forebyggende barnevernstiltak;2320;Hjelpetiltak i hjemmet;Råd, veiledning, støttekontakt og avlastning i familien
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;233;Barnevernstiltak utenfor hjemmet;2330;Fosterhjem og barnevernsinstitusjoner;Plassering i fosterhjem, beredskapshjem og statlige/private institusjoner
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;234;Aktivisering og støttetjenester for barn og unge;2340;Ungdomsklubber og utekontakt;Forebyggende ungdomsarbeid, fritidsklubber og oppsøkende virksomhet
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;241;Forebyggende helsetjenester;2410;Helsestasjon og skolehelsetjeneste;Helsestasjon 0-5 år, skolehelsetjeneste, vaksinasjon og jordmor
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;242;Kommunehelsetjeneste og re/habilitering;2420;Fastlegeordning, fysioterapi og ergoterapi;Fastlegetilskudd, fysioterapihjemler og ergoterapitjenester
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;243;Legevakt og medisinsk nødmeldetjeneste;2430;Interkommunal legevakt;Øyeblikkelig hjelp utenom fastlegens åpningstid
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;253;Pleie og omsorg i institusjon;2530;Sykehjem og langtidsopphold;24/7 heldøgns pleie og omsorg i kommunale omsorgssentre
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;257;Hjemmetjenester i bofellesskap;2570;Omsorgsboliger med personellbase;Tjenester til beboere i tilrettelagte bofellesskap/omsorgsboliger
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;258;Hjemmetjenester ambulerende virksomhet;2580;Hjemmesykepleie og praktisk bistand;Ambulerende helsehjelp og rengjøring/hjelp i eget hjem
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;261;Støtte, avlastning og omsorgsstønad;2610;Trygghetsalarm og pårørendeavlastning;Tekniske hjelpemidler, trygghetsalarmer og pårørendeavlastning
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;271;Sosiale tjenester (NAV);2710;Økonomisk sosialhjelp og rådgivning;Utbetaling av sosialhjelp og økonomisk rådgivning jf. NAV-loven
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;273;Arbeidsrettede tiltak og kvalifisering;2730;Kvalifiseringsprogrammet (KVP);Kommunale arbeidstreningstiltak og kvalifiseringsstønad
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;275;Introduksjonsordning for flyktninger;2750;Bosetting og introduksjonsprogram;Kvalifisering og integrering av nylig bosatte flyktninger
+Funksjon;HF2;Oppvekst, utdanning, helse og omsorg;276;Kommunalt disponerte boliger;2760;Boligsosiale tiltak og midlertidig botilbud;Forvaltning av kommunale utleieboliger og nødboliger
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;300;Kultur, idrett og bibliotek general;3000;Kulturadministrasjon og felleskultur;Kulturskole, allmennkultur, kulturmidler og arrangementer
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;301;Folkebibliotek;3010;Folkebibliotek og utlånstjenester;Bokutlån, digitale medier og kulturformidling i bibliotek
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;302;Kunst, museum og kino;3020;Museer, scenekunst og kinosaler;Støtte til regionale museer, teater og kommunal koinodrift
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;303;Idrett, friluftsliv og samfunnshus;3030;Idrettsanlegg, svømmehaller og turløyper;Drift av idrettshaller, svømmebasseng, turløyper og nærmiljøanlegg
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;315;Kirke, gravplasser og livssyn;3150;Kirkelig fellesråd og gravplassforvaltning;Driftstilskudd til Kirkelig fellesråd og vedlikehold av gravplasser
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;320;Kommunal næringsutvikling;3200;Næringsrådgivning og tilrettelegging;Tilrettelegging for lokalt næringsliv, etablerersenter og reiseliv
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;325;Næringsfond og konsesjonskraft;3250;Kommunalt næringsfond;Tildeling av næringsstøtte og utnyttelse av konsesjonskraftmidler
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;330;By- og stedsutvikling, vei og park;3300;Planlegging av vei, park og grøntarealer;Forvaltning og utvikling av kommunal infrastruktur
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;332;Kommunale veier og gatelys;3320;Vintervedlikehold, gatelys og asfalt;Brøyting, salting, asfaltreparasjoner og drift av veilysanlegg
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;333;Kollektivtransport;3330;Lokal transport og hurtigbåt;Kommunalt bidrag til kollektivtilbud og skoleskyssbehov
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;335;Havner og farleder;3350;Kommunale kaier og gjestehavner;Drift av småbåthavner, kommunale dypvannskaier og moloer
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;338;Brann- og redningstjeneste;3380;Brannvesen, feiing og beredskap;24/7 brannberedskap, feiing, tilsyn med fyringsanlegg og akutt beredskap
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;340;Vannforsyning (selvkost);3400;Drikkevann, vannverk og ledningsnett;Produsere trygt drikkevann og overføring via ledningsnett (100% selvkost)
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;345;Avløpshåndtering (selvkost);3450;Renseanlegg og avløpsnett;Oppsamling og rensing av avløpsvann (100% selvkost)
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;350;Renovasjon og kildesortering;3500;Innsamling og behandling av husholdningsavfall;Henting av avfall, miljøstasjoner og kildesortering (100% selvkost)
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;355;Fysisk miljø og naturforvaltning;3550;Miljøvern, viltforvaltning og forurensning;Klimatiltak, vassdragsforvaltning og oppfølging av utslippstillatelser
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;360;Byggesak, oppmåling og kart;3600;Byggesaksbehandling, geodata og oppmåling;Saksbehandling etter plan- og bygningsloven, karttjenester og eiendomsoppmåling
+Funksjon;HF3;Samferdsel, kultur, miljø og teknisk;365;Eierstyring og eiendomsforvaltning;3650;Forvaltning av utleieeiendom og tomter;Kjøp/salg av tomter, eiendomsforvaltning og eieroppfølging i IKS/KF
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;800;Skatt på inntekt og formue;8000;Kommunal inntekts- og formuesskatt;Skatteinntekter fra personlige skatteytere
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;810;Andre statlige overføringer;8100;Integreringstilskudd og produksjonsavgift;Statlige øremerkede tilskudd og produksjonsavgift vindkraft
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;840;Rammetilskudd fra staten;8400;Inntekts- og innbyggertilskudd;Generelt statlig rammetilskudd beregnet etter inntektssystemet
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;850;Statstilskudd til bosetting flyktninger;8500;Bosettingstilskudd fra IMDi;Tilskudd ved bosetting av overføringsflyktninger og personer fra Ukraina
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;870;Eiendomsskatt generelt;8700;Eiendomsskatt næring og verksted/bruk;Utskriving av eiendomsskatt på næringseiendom og kraftnett
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;878;Eiendomsskatt på boliger;8780;Eiendomsskatt heloppførte boliger;Særskilt art/funksjon for eiendomsskatt på helårsboliger (innført 2025)
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;879;Eiendomsskatt på fritidsboliger;8790;Eiendomsskatt fritidseiendom;Særskilt art/funksjon for eiendomsskatt på fritidsboliger (innført 2025)
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;880;Interne overføringer i konsern;8800;Konserninterne overføringer;Elimineringskonto for transaksjoner mellom kommunekassen og KF/IKS
+Funksjon;HF8;Finans, skatt, rammetilskudd og fond;899;Rapportkontrollpost / Avstemming;8990;Teknisk avstemmingskonto;Rapportkontrollpost ved konvertering fra Norsk Standard NS 4102 til KOSTRA
+Art;Serie 0;Lønn og sosiale utgifter;1010;Fast lønn / fastlønn;1010;Fastlønn i faste stillinger;Bruttolønn til fast ansatte i kommunen
+Art;Serie 0;Lønn og sosiale utgifter;1020;Lønn til vikarer / sykevikarer;1020;Sykemeldte vikarer og kortere vikariat;Lønn til timelønnede og tilkallingsvikarer ved sykdom
+Art;Serie 0;Lønn og sosiale utgifter;1030;Lønn til ekstrahjelp;1030;Timelønnede ekstrahjelper;Ekstrahjelp ved sesongtopper eller prosjektarbeid
+Art;Serie 0;Lønn og sosiale utgifter;1040;Lønn til lærlinger;1040;Lærlingelønn;Lønn og godtgjørelse til kommunale lærlinger
+Art;Serie 0;Lønn og sosiale utgifter;1050;Annen lønn og trekkpliktige godtgjørelser;1050;Utrykning, klesgodtgjørelse o.l.;Trekkpliktige uregelmessige tillegg og godtgjørelser
+Art;Serie 0;Lønn og sosiale utgifter;1090;Overtidslønn og helgetillegg;1090;Overtid og ubekvem arbeidstid;Overtidsbetaling, helgetillegg og kveldstillegg jf. HTA
+Art;Serie 0;Lønn og sosiale utgifter;1099;Påløpt og avsatt lønn/feriepenger;1099;Feriepengeavsetning;Regnskapsmessig avsetning for opptjente feriepenger
+Art;Serie 0;Lønn og sosiale utgifter;1200;Pensjonsinnskudd KLP / SPK;1200;Arbeidsgivers pensjonsinnskudd;Lovpålagt pensjonspremie til KLP, SPK eller private kasser
+Art;Serie 0;Lønn og sosiale utgifter;1210;Arbeidsgiveravgift;1210;Arbeidsgiveravgift av lønn og pensjon;Soneavhengig arbeidsgiveravgift til Skatteetaten
+Art;Serie 0;Lønn og sosiale utgifter;1220;Yrkesskadeforsikring og gruppeliv;1220;Rolledirigerte personalforsikringer;Lovpålagte forsikringsordninger for kommunalt ansatte
+Art;Serie 1-2;Kjøp av varer og tjenester;1100;Kontormateriell og trykksaker;1100;Papir, rekvisita og trykk;Standard kontorrekvisita og trykking av brosjyrer
+Art;Serie 1-2;Kjøp av varer og tjenester;1115;Undervisningsmateriell;1115;Lærebøker og digitale læremidler;Pedagogisk materiell, skolerevisjonsbøker og lisenser
+Art;Serie 1-2;Kjøp av varer og tjenester;1120;Møbler, inventar og utstyr;1120;Kontormøbler og bruksutstyr;Kjøp av løsøre, stoler, pult og ikke-aktiverbart utstyr
+Art;Serie 1-2;Kjøp av varer og tjenester;1130;Telefoni og datakommunikasjon;1130;Bredbånd, mobil og telefoni;Mobilabonnement, linjeleie og datakommunikasjon
+Art;Serie 1-2;Kjøp av varer og tjenester;1140;Annonser, reklame og informasjon;1140;Avisannonser, stillingsutlysninger og info;Kunngjøring av reguleringsplaner, stillinger og informasjon
+Art;Serie 1-2;Kjøp av varer og tjenester;1150;Opplæring, kurs og kompetanseheving;1150;Kursavgifter og etterutdanning;Kompetansehevingstiltak for ansatte og deltakelsesavgifter
+Art;Serie 1-2;Kjøp av varer og tjenester;1160;Skyss- og reiseutgifter (oppgavepliktig);1160;Kjøregodtgjørelse egen bil;Kilometergodtgjørelse utbetalt etter statens satser
+Art;Serie 1-2;Kjøp av varer og tjenester;1170;Reiseutgifter (ikke oppgavepliktig);1170;Fly, tog, hotell og diett;Billetter, offentlig transport og overnatting ved tjenestereiser
+Art;Serie 1-2;Kjøp av varer og tjenester;1180;Energi, strøm og fjernvarme;1180;Elektrisk kraft, nettleie og fjernvarme;Strømforbruk og oppvarming av kommunale formålsbygg
+Art;Serie 1-2;Kjøp av varer og tjenester;1190;Husleie og leie av lokaler;1190;Leiekostnader for bygg og eiendom;Inngåtte leieavtaler for eksterne formålsbygg og kontorer
+Art;Serie 1-2;Kjøp av varer og tjenester;1200;Forbruksmateriell og råvarer;1200;Driftsrekvisita, verneutstyr og kjemikalier;Standard innsatsfaktorer til drift av vann/avløp, park og pleie
+Art;Serie 1-2;Kjøp av varer og tjenester;1220;Vedlikehold av maskiner og utstyr;1220;Reparasjon og service på kjetting/biler;Løpende vedlikehold av teknisk utstyr, legevaktbiler og maskiner
+Art;Serie 1-2;Kjøp av varer og tjenester;1230;Vedlikeholdstjenester bygninger;1230;Maler, elektriker og rørleggertjenester;Løpende bygningsmessig vedlikehold utført av håndverkere
+Art;Serie 1-2;Kjøp av varer og tjenester;1240;Serviceavtaler, lisenser og SaaS;1240;Programvarelisenser Visma, Framsikt m.fl.;Årlige lisensavgifter, IT-vedlikehold og skytjenester
+Art;Serie 1-2;Kjøp av varer og tjenester;1250;Konsulenttjenester og revisjon;1250;Ekstern rådgivning, juss og konsulenter;Kjøp av spesialistkompetanse, prosjekteringsbistand og revisjon
+Art;Serie 1-2;Kjøp av varer og tjenester;1260;Renhold og vaskeritjenester;1260;Kjøpt renhold og tøyvask;Renholdstjenester fra eksterne leverandører og tekstilvask
+Art;Serie 1-2;Kjøp av varer og tjenester;1270;Andre kjøp av driftstjenester;1270;Kjøp fra private og næringsliv;Driftsavtaler for snøbrøyting, vakthold og sikkerhet
+Art;Serie 3-4;Overføringer og tilskudd ut;1300;Kjøp av tjenester fra staten;1300;Statlige refusjonskrav;Kjøp av spesialisttjenester eller statlige institusjonsplasser
+Art;Serie 3-4;Overføringer og tilskudd ut;1330;Kjøp av tjenester fra fylkeskommuner;1330;Fylkeskommunale kjøp;Kjøp av tannhelsetjenester, videregående plasser o.l.
+Art;Serie 3-4;Overføringer og tilskudd ut;1350;Kjøp av tjenester fra andre kommuner;1350;Vertskommunesamarbeid og gjesteelever;Gjesteelevsoppgjør i skole og kjøp av legevakttjenester
+Art;Serie 3-4;Overføringer og tilskudd ut;1370;Tilskudd til private og ideelle;1370;Driftstilskudd til private barnehager m.m.;Lovpålagte tilskudd til private barnehager, idrettslag og kultur
+Art;Serie 3-4;Overføringer og tilskudd ut;1380;Kjøp fra andre enheter i KOSTRA konsern;1380;Konserninterne kjøp drift;Kjøp av tjenester fra kommunalt foretak (KF) eller IKS jf. Art 380
+Art;Serie 3-4;Overføringer og tilskudd ut;1400;Direkte overføringer til innbyggere;1400;Sosialhjelpsutbetalinger og stønad;Utbetaling av bidrag, livsopphold og husleiestøtte
+Art;Serie 3-4;Overføringer og tilskudd ut;1470;Stønader og bidrag til private;1470;Næringsstøtte, kulturmidler og tilskudd;Utbetaling fra næringsfond og tilskudd til frivillighet
+Art;Serie 3-4;Overføringer og tilskudd ut;1480;Overføringer til enheter i KOSTRA konsern;1480;Konserninterne overføringer drift;Driftstilskudd overført til IKS eller kommunalt foretak jf. Art 480
+Art;Serie 5;Finansutgifter og avsetninger;1500;Renteutgifter på lånegjeld;1500;Renter på investeringslån;Renteinnbetalinger til KLP Kommunekreditt, banker og sertifikater
+Art;Serie 5;Finansutgifter og avsetninger;1501;Konserninterne renteutgifter;1501;Renter til KF / IKS;Internrente belasted enheter innen KOSTRA konsern
+Art;Serie 5;Finansutgifter og avsetninger;1510;Avdrag på lån;1510;Ordinære avdrag på gjeldsporteføljen;Lovpålagt minimumsavdrag på kommunens lånegjeld Jf. § 14-18
+Art;Serie 5;Finansutgifter og avsetninger;1520;Utlån og videreutlån;1520;Videreutlån av Startlån;Tildeling av Husbankens startlån til innbyggere
+Art;Serie 5;Finansutgifter og avsetninger;1530;Avsetning til bundne driftsfond;1530;Fondsoppbygging bundne midler;Avsetning av ubenyttede øremerkede statstilskudd og gavetildelinger
+Art;Serie 5;Finansutgifter og avsetninger;1540;Avsetning til ubundne driftsfond;1540;Avsetning til disposisjonsfond;Overføring av driftsoverskudd til det sentrale disposisjonsfondet
+Art;Serie 5;Finansutgifter og avsetninger;1550;Avsetning til bundne investeringsfond;1550;Investeringsfond bundet;Avsetning av salgsinntekter øremerket nye investeringer
+Art;Serie 5;Finansutgifter og avsetninger;1570;Overføring fra drift til investering;1570;Egenkapitalfinansiering investering;Bruk av løpende driftsmidler til å dekke årets investeringsprosjekter
+Art;Serie 5;Finansutgifter og avsetninger;1590;Motpost avskrivninger;1590;Korreksjon av ordinære avskrivninger;Regnskapsmessig motpost for å nøytralisere avskrivningers resultateffekt
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1600;Brukerbetalinger for tjenester;1600;Foreldrebetaling SFO og barnehage;Betaling fra innbyggere for opphold i barnehage, SFO og kulturskole
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1620;Salgs- og leieinntekter, gebyrer;1620;Byggesaksgebyrer, selvkost og torgleie;Kommunale gebyrer for byggesak, oppmåling og feiing
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1630;Husleieinntekter og festavgift;1630;Husleie kommunale boliger;Innbetalt leie for kommunale utleieboliger og tomtefeste
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1640;Merverdiavgiftskompensasjon drift;1640;Momskompensasjon på driftskjøp;Refusjon av momskompensasjon fra staten jf. momskompensasjonsloven
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1650;Salg av driftsmidler;1650;Salg av brukte biler, inventar o.l.;Inntekter fra avhending av kommunale driftsmidler
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1690;Sykelønnsrefusjon fra NAV;1690;NAV sykemeldingsrefusjon;Refusjon av sykepenger og fødselspenger fra NAV (60-90 dager etterslep)
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1691;Andre trygde- og NAV-refusjoner;1691;KVP og tilretteleggingsrefusjon;Refusjon for kvalifiseringsstønad, pleiepenger og tilrettelagt arbeid
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1700;Refusjon fra staten;1700;Øremerkede statlige driftstilskudd;Refusjon fra IMDi, Helsedirektoratet og Utdanningsdirektoratet
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1730;Refusjon fra fylkeskommuner;1730;Fylkeskommunal refusjon;Refusjon for skoleskyss, tannhelse og fylkesveiprosjekter
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1750;Refusjon fra andre kommuner;1750;Vertskommune- og gjesteelevrefusjon;Refusjonskrav sendt nabokommuner for gjesteelever og legevakt
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1770;Refusjon fra private/andre;1770;Forsikringsoppgjør og private refusjoner;Utbetaling av forsikringsoppgjør ved skade og private tilskudd
+Art;Serie 6-7;Salgs- og leieinntekter og refusjoner;1780;Salg til enheter i KOSTRA konsern;1780;Konserninterne salg drift;Fakturering av tjenester solgt til KF eller IKS jf. Art 780
+Art;Serie 8;Sentrale inntekter uten motytelse;1800;Skatt på inntekt og formue;1800;Kommunal inntektsskatt;Kommunens andel av forskrekkskatt, skatteutjevning og formueskatt
+Art;Serie 8;Sentrale inntekter uten motytelse;1810;Andre statlige overføringer;1810;Produksjonsavgift landbasert vindkraft;Omklassifisert statlig overføring for vindkraft (fra art 877 i 2025)
+Art;Serie 8;Sentrale inntekter uten motytelse;1840;Rammetilskudd fra staten;1840;Innbyggertilskudd og utjevning;Fri statlig rammefinansiering fra Kommunal- og distriktsdepartementet
+Art;Serie 8;Sentrale inntekter uten motytelse;1850;Statstilskudd til bosetting flyktninger;1850;IMDi bosettingstilskudd;Satsbasert tilskudd per bosatt flyktning fra staten
+Art;Serie 8;Sentrale inntekter uten motytelse;1870;Eiendomsskatt generelt;1870;Eiendomsskatt næring og kraftnett;Innbetalt eiendomsskatt fra næringsliv og energiaktører
+Art;Serie 8;Sentrale inntekter uten motytelse;1878;Eiendomsskatt på boliger;1878;Eiendomsskatt helårsboliger;Særskilt utskrevet eiendomsskatt på boligeiendom (ny fra 2025)
+Art;Serie 8;Sentrale inntekter uten motytelse;1879;Eiendomsskatt på fritidsboliger;1879;Eiendomsskatt fritidsboliger;Særskilt utskrevet eiendomsskatt på hytter/fritidshus (ny fra 2025)
+Art;Serie 8;Sentrale inntekter uten motytelse;1880;Overføringer fra enheter i konsernet;1880;Konserninterne overføringer inn;Mottatt utbytte eller konsernbidrag fra KF/IKS jf. Art 880
+Art;Serie 9;Finansinntekter og bruk av fond;1900;Renteinntekter og aksjeutbytte;1900;Renter på bankinnskudd og utbytte;Inntjening på likviditetsreserver, renteinntekter og aksjeutbytte
+Art;Serie 9;Finansinntekter og bruk av fond;1901;Konserninterne renteinntekter;1901;Renter mottatt fra KF / IKS;Mottatt internrente på utlån til kommunale foretak
+Art;Serie 9;Finansinntekter og bruk av fond;1910;Mottatte avdrag på utlån;1910;Avdragsinngang på Startlån;Innbetalte avdrag fra innbyggere på videreutlånte Startlån
+Art;Serie 9;Finansinntekter og bruk av fond;1930;Bruk av bundne driftsfond;1930;Uttak fra bundne fond;Inntektføring av tidligere avsatte øremerkede midler til årets drift
+Art;Serie 9;Finansinntekter og bruk av fond;1940;Bruk av ubundne driftsfond;1940;Bruk av disposisjonsfond;Overføring fra det sentrale disposisjonsfondet for å dekke driftstiltak
+Art;Serie 9;Finansinntekter og bruk av fond;1950;Bruk av bundne investeringsfond;1950;Uttak fra investeringsfond;Inntektføring av avsatte investeringsmidler
+Art;Serie 9;Finansinntekter og bruk av fond;1970;Overføring fra drift til investering (inntekt);1970;Finansieringsinntekt investering;Korrigerende inntektspost i investeringsregnskapet
+Art;Serie 9;Finansinntekter og bruk av fond;1990;Dekning av tidligere års merforbruk;1990;Inndekking av udekket underskudd;Bruk av årets overskudd til å dekke tidligere års udekket merforbruk
+Balanse;Aktiva;Omløpsmidler (2.1);2.10;Kasse, bankinnskudd og sertifikater;2100;Bankinnskudd og likviditetsreserve;Kassebeholdning, driftskontoer i bank og kortsiktige plasseringer
+Balanse;Aktiva;Omløpsmidler (2.1);2.13;Kortsiktige fordringer og merverdiavgift;2130;Utestående fordringer og momsrefusjon;Kundefordringer, statlige momskompensasjonskrav og NAV-krav
+Balanse;Aktiva;Anleggsmidler (2.2);2.21;Langsiktige aksjer og andeler;2210;Aksjer i KF, IKS og kraftselskaper;Kommunens eierandeler i IKS, kommunale foretak og energi
+Balanse;Aktiva;Anleggsmidler (2.2);2.24;Utlån og videreutlån;2240;Startlånsportefølje og andre utlån;Langsiktig utlånsportefølje finansiert via Husbanken
+Balanse;Aktiva;Anleggsmidler (2.2);2.27;Fast eiendom, anlegg og formålsbygg;2270;Skoler, sykehjem, veier og VA-anlegg;Bokført verdi av kommunens realkapital og varige driftsmidler
+Balanse;Passiva;Egenkapital (2.8);2.80;Disposisjonsfond (ubundne driftsfond);2800;Sentralt disposisjonsfond;Fritt disponibel egenkapital til oppdemming av uventede driftsavvik
+Balanse;Passiva;Egenkapital (2.8);2.81;Bundne driftsfond;2810;Bundne fond for øremerkede midler;Egenkapital reservert for spesifikke statlige eller avtalefestede formål
+Balanse;Passiva;Egenkapital (2.8);2.87;Kapitalkonto;2870;Kapitalkonto (netto realkapital);Akkumulert egenkapital bundet i fast eiendom og anleggsmidler
+Balanse;Passiva;Gjeld (2.9);2.91;Kortsiktig gjeld og leverandørgjeld;2910;Ubetalte leverandørfakturaer og skattetrekk;Kortsiktige forpliktelser med forfall innen 12 måneder
+Balanse;Passiva;Gjeld (2.9);2.94;Langsiktig lånegjeld;2940;Investeringslån KLP og Kommunekreditt;Langsiktig gjeldsportefølje opptatt til finansiering av realkapital
+Balanse;Passiva;Gjeld (2.9);2.98;Netto pensjonsforpliktelser;2980;Brutto pensjonsforpliktelse KLP/SPK;Aktuarberegnet framtidig pensjonsforpliktelse for alle ansatte

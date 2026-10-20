@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.vscode/
+.idea/
+notebooks/.ipynb_checkpoints/
+*.db-journal
