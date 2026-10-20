@@ -81,29 +81,31 @@ Sidebar --> Tabs["7 Interaktive Faner\n1. AI-Chat\n2. Månedsoversikt & Trafikkl
 Tabs --> Exporters["Eksportmoduler\n• PDF Månedsmelding\n• PowerPoint statusdeck\n• Fargekodet Excel"]
 end
 
-    subgraph Agent ["2. AI Agent & Orkestreringslag (Gemini 2.0 Flash / agent-v3.py)"]
-        SystemPrompt["📜 System Prompt & Rules\n• GDPR & Dataminimering\n• Kommuneloven § 14-5 & Økonomireglement\n• Etisk sperre for lovpålagte minstetjenester\n• Human-in-the-Loop (Kun rådgivende)"]
-        ExecutionLoop["🔄 Bounded Execution Loop\n(Maks 5 iterasjoner)"]
-        Schemas["📐 Pydantic v2 Schemas (schemas-v3.py)\n• Typevalidering av verktøyargumenter"]
+    subgraph Agent ["2. AI Agent & Orkestreringslag (AI_KOM Multi-Agent & Looped Engineering / agent.py)"]
+        Supervisor["🧭 SupervisorAgent\n• Ruter spørringer til spesialisert subgraf:\n  - regnskap_erp_agent\n  - framsikt_eoy_agent\n  - saksbehandling_agent"]
+        SystemPrompt["📜 System Prompt & Rules\n• GDPR & Dataminimering\n• Kommuneloven § 14-5 & Økonomireglement\n• Etisk sperre for lovpålagte minstetjenester\n• Human-in-the-Loop (HITL Intercepts)"]
+        ExecutionLoop["🔄 Bounded Self-Correction Loop\n(AgentState Checkpointing & Maks Retries)"]
+        Schemas["📐 Pydantic v2 Schemas (schemas.py)\n• Typevalidering av verktøyargumenter"]
 
+        Supervisor --- SystemPrompt
         SystemPrompt --- ExecutionLoop
         ExecutionLoop --- Schemas
     end
 
-    subgraph Tools ["3. Verktøy & Logikklag (tools-v3.py)"]
-        SQLTool["💾 Secure SQL Query Engine\n• Parameteriserte spørringer\n• RBAC WHERE-filtrering\n• K-anonymisering / Maskering"]
+    subgraph Tools ["3. Verktøy & Logikklag (tools.py)"]
+        SQLTool["💾 RegnskapERPAgent / Secure SQL\n• Parameteriserte spørringer med Self-Correction\n• RBAC WHERE-filtrering\n• K-anonymisering / Maskering"]
         RAGTool["📚 Grounded RAG Search\n• Vektorsøk i Økonomiplan, Tertialrapporter & Forskrifter"]
-        EOYTool["🔮 EOY & Lønnsmotor\n• Prediktiv årsprognose\n• Lønnsrammer, AGA, Pensjon"]
-        ReallocTool["⚖️ Omdisponeringsmotor\n• Fullmaktssjekk\n• Saksframlegg-generator"]
+        EOYTool["🔮 FramsiktEOYAgent & Lønnsmotor\n• Prediktiv EAC/ETC-årsprognose\n• Lønnsrammer, AGA, Pensjon"]
+        ReallocTool["⚖️ SaksbehandlingAgent (§ 14-5)\n• Fullmaktssjekk & HITL Godkjenning\n• Saksframlegg-generator"]
     end
 
     subgraph Governance ["4. Sikkerhet, Audit & Datatilsyn"]
-        AuditLog[("📝 Uforanderlig Audit Log\n(audit_log tabell i SQLite)")]
-        RBACEngine["🔒 RBAC Enforcement Engine"]
+        AuditLog[("📝 Uforanderlig Audit Log\n(audit_log & log_audit_trail)")]
+        RBACEngine["🔒 RBAC Enforcement Engine\n(sec_user_permissions / SCIM 2.0)"]
     end
 
-    subgraph Data ["5. Datagrunnlag & Infrastruktur (Docker & Database)"]
-        DB[("🗄️ SQLite / PostgreSQL\n• stg_erp_transactions\n• Dim_Enhet_Ansvar\n• Dim_KOSTRA_Funksjon\n• Dim_KOSTRA_Art")]
+    subgraph Data ["5. Datagrunnlag & Star Schema (Docker & Database)"]
+        DB[("🗄️ SQLite / PostgreSQL Star Schema\n• fact_erp_transactions & stg_erp_transactions\n• fact_budget_allocations\n• dim_organisasjon & dim_kostra_kontoplan\n• dim_tid & dim_prosjekt_tiltak")]
         Docs["📄 Kunnskapsbase\n(PDF-er, KOSTRA-veiledere, Lovverk)"]
         KSFiks["📡 KS Fiks / ERP APIs\n(Unit4, Framsikt, GAT)"]
     end

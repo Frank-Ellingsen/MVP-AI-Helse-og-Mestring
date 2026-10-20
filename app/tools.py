@@ -144,30 +144,35 @@ def query_erp_transactions_secure(
         )
         return "Sikkerhetsfeil: Kun SELECT-spørringer er tillatt."
 
-    # RBAC Sjekk: Enhetsledere får kun se sine egne ansvarsnumre ved oppslag i stg_erp_transactions
-    if (
-        user_role == "enhetsleder"
-        and allowed_ansvar
-        and "STG_ERP_TRANSACTIONS" in clean_query.upper()
-        and "ANSVAR" not in clean_query.upper()
-    ):
+    # RBAC Sjekk: Enhetsledere får kun se sine egne ansvarsnumre ved oppslag i stg_erp_transactions / fact_erp_transactions
+    upper_q = clean_query.upper()
+    if user_role == "enhetsleder" and allowed_ansvar and "ANSVAR" not in upper_q:
         ansvar_filter = ", ".join([f"'{a}'" for a in allowed_ansvar])
-        if "WHERE" in clean_query.upper():
-            idx = clean_query.upper().find("WHERE")
-            clean_query = (
-                clean_query[: idx + 5]
-                + f" ansvar IN ({ansvar_filter}) AND "
-                + clean_query[idx + 5 :]
-            )
-        elif "GROUP BY" in clean_query.upper():
-            idx = clean_query.upper().find("GROUP BY")
-            clean_query = (
-                clean_query[:idx]
-                + f" WHERE ansvar IN ({ansvar_filter}) "
-                + clean_query[idx:]
-            )
-        else:
-            clean_query = clean_query.rstrip(";") + f" WHERE ansvar IN ({ansvar_filter})"
+        col_name = "ansvar_id" if ("FACT_ERP_TRANSACTIONS" in upper_q or "FACT_BUDGET_ALLOCATIONS" in upper_q) else "ansvar"
+        if "STG_ERP_TRANSACTIONS" in upper_q or "FACT_ERP_TRANSACTIONS" in upper_q or "FACT_BUDGET_ALLOCATIONS" in upper_q:
+            if "WHERE" in upper_q:
+                idx = upper_q.find("WHERE")
+                clean_query = (
+                    clean_query[: idx + 5]
+                    + f" {col_name} IN ({ansvar_filter}) AND "
+                    + clean_query[idx + 5 :]
+                )
+            elif "GROUP BY" in upper_q:
+                idx = upper_q.find("GROUP BY")
+                clean_query = (
+                    clean_query[:idx]
+                    + f" WHERE {col_name} IN ({ansvar_filter}) "
+                    + clean_query[idx:]
+                )
+            elif "LIMIT" in upper_q:
+                idx = upper_q.find("LIMIT")
+                clean_query = (
+                    clean_query[:idx]
+                    + f" WHERE {col_name} IN ({ansvar_filter}) "
+                    + clean_query[idx:]
+                )
+            else:
+                clean_query = clean_query.rstrip(";") + f" WHERE {col_name} IN ({ansvar_filter})"
 
     try:
         conn = sqlite3.connect(DB_PATH)

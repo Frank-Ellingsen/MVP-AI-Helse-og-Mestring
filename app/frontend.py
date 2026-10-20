@@ -17,7 +17,15 @@ if str(PROJECT_ROOT) not in sys.path:
 load_dotenv(PROJECT_ROOT / ".env")
 
 try:
-    from app.agent import run_krs_agent
+    from app.agent import (
+        run_krs_agent,
+        SupervisorAgent,
+        RegnskapERPAgent,
+        FramsiktEOYAgent,
+        SaksbehandlingAgent,
+        AgentState,
+        run_multi_agent_workflow,
+    )
     from app.tools import (
         query_erp_transactions_secure,
         search_knowledge_base,
@@ -33,7 +41,15 @@ try:
     )
     from app.schemas import UserContext, BudgetReallocationInput
 except ImportError:
-    from agent import run_krs_agent
+    from agent import (
+        run_krs_agent,
+        SupervisorAgent,
+        RegnskapERPAgent,
+        FramsiktEOYAgent,
+        SaksbehandlingAgent,
+        AgentState,
+        run_multi_agent_workflow,
+    )
     from tools import (
         query_erp_transactions_secure,
         search_knowledge_base,
@@ -259,7 +275,39 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
 # TAB 1: AI-ØKONOMIRÅDGIVER
 # ==============================================================================
 with tab1:
-    st.subheader("AI-Økonomirådgiver med Sikkerhets- og Personvernguardrails")
+    st.subheader("AI-Økonomirådgiver — AI_KOM Multi-Agent Supervisor & Looped Engineering")
+    last_routed = st.session_state.get("last_routed_agent", "regnskap_erp_agent")
+    hitl_approval = st.checkbox(
+        "Human-in-the-Loop (HITL) Saksbehandler-bekreftelse gitt (`approval_granted=True` for § 14-5 omdisponeringer)",
+        value=False,
+    )
+    st.markdown(
+        f"""
+        <div class="tufte-kpi-strip">
+            <div class="tufte-kpi-item">
+                <span class="tufte-kpi-label">Orkestrering</span>
+                <span class="tufte-kpi-value" style="font-size:17px;">SupervisorAgent</span>
+                <span class="tufte-kpi-sub">LangGraph Multi-Agent Router</span>
+            </div>
+            <div class="tufte-kpi-item">
+                <span class="tufte-kpi-label">Aktiv Subgraf</span>
+                <span class="tufte-kpi-value" style="font-size:17px;">{last_routed}</span>
+                <span class="tufte-kpi-sub">ERP SQL | Framsikt EOY | § 14-5 Saksbeh.</span>
+            </div>
+            <div class="tufte-kpi-item">
+                <span class="tufte-kpi-label">Self-Correction Loop</span>
+                <span class="tufte-kpi-value" style="font-size:17px;">Maks 3 Retries</span>
+                <span class="tufte-kpi-sub">Bounded SQL Reflection</span>
+            </div>
+            <div class="tufte-kpi-item">
+                <span class="tufte-kpi-label">HITL § 14-5 Gate</span>
+                <span class="tufte-kpi-value {'val-muted' if hitl_approval else 'risk-amber'}" style="font-size:17px;">{'GODKJENT' if hitl_approval else 'VENTER BEKREFTELSE'}</span>
+                <span class="tufte-kpi-sub">Kommuneloven § 14-5</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.caption("Klikk på et hurtigspørsmål under eller skriv inn ditt eget spørsmål:")
 
     q_cols = st.columns(4)
@@ -290,13 +338,16 @@ with tab1:
     active_prompt = triggered_prompt or chat_input_val
 
     if active_prompt:
+        sup = SupervisorAgent()
+        routed = sup.route({"messages": [{"role": "user", "content": active_prompt}]})  # type: ignore
+        st.session_state["last_routed_agent"] = routed
         st.session_state.messages.append({"role": "user", "content": active_prompt})
         with st.chat_message("user"):
             st.markdown(active_prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner("Analyserer forespørsel, sjekker RBAC-tilganger og henter data..."):
-                response = run_krs_agent(active_prompt, user_ctx)
+            with st.spinner(f"Supervisor ruter til {routed}, sjekker RBAC-tilganger og henter data..."):
+                response = run_krs_agent(active_prompt, user_ctx, approval_granted=hitl_approval)
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
 

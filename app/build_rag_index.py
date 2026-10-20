@@ -82,6 +82,89 @@ def init_db():
             cursor.execute(f"ALTER TABLE stg_erp_transactions ADD COLUMN {col_name} {col_type};")
 
     # tillat NULL på source_system dersom tabellen har eldre skjema
+    # 3. Star Schema Dimensjons- og Faktatabeller (jf. star_schema_DDL.md)
+    cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS dim_organisasjon (
+            ansvar_id VARCHAR(10) PRIMARY KEY,
+            ansvar_navn VARCHAR(100) NOT NULL,
+            enhet_navn VARCHAR(100) NOT NULL,
+            kommunalsjef_omrade VARCHAR(100) NOT NULL,
+            sektor VARCHAR(100) NOT NULL DEFAULT 'Helse og Mestring',
+            enhetsleder_ansatt_id VARCHAR(20),
+            oppdatert_dato TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS dim_kostra_kontoplan (
+            art_id VARCHAR(10) PRIMARY KEY,
+            art_navn VARCHAR(100) NOT NULL,
+            artsgruppe VARCHAR(100) NOT NULL,
+            funksjon_id VARCHAR(10) NOT NULL,
+            funksjon_navn VARCHAR(100) NOT NULL,
+            kontoklasse INT NOT NULL CHECK (kontoklasse IN (1, 2)),
+            skjermet_for_kutt BOOLEAN DEFAULT FALSE
+        );
+
+        CREATE TABLE IF NOT EXISTS dim_tid (
+            dato_key INT PRIMARY KEY,
+            dato DATE NOT NULL,
+            aar INT NOT NULL,
+            periode INT NOT NULL CHECK (periode BETWEEN 1 AND 12),
+            kvartal INT NOT NULL CHECK (kvartal BETWEEN 1 AND 4),
+            tertial INT NOT NULL CHECK (tertial BETWEEN 1 AND 3)
+        );
+
+        CREATE TABLE IF NOT EXISTS dim_prosjekt_tiltak (
+            prosjekt_id VARCHAR(20) PRIMARY KEY,
+            prosjekt_navn VARCHAR(100) NOT NULL,
+            prosjektleder_ansatt_id VARCHAR(20),
+            omstillingskategori VARCHAR(50)
+        );
+
+        CREATE TABLE IF NOT EXISTS fact_erp_transactions (
+            transaksjon_id VARCHAR(50) PRIMARY KEY,
+            dato_key INT NOT NULL,
+            ansvar_id VARCHAR(10) NOT NULL,
+            art_id VARCHAR(10) NOT NULL,
+            prosjekt_id VARCHAR(20) DEFAULT '0000',
+            belop DECIMAL(15, 2) NOT NULL,
+            bilagsnummer VARCHAR(30) NOT NULL,
+            tekst_beskrivelse TEXT,
+            kilde_system VARCHAR(20) DEFAULT 'Unit4 ERP',
+            importert_dato TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (dato_key) REFERENCES dim_tid(dato_key),
+            FOREIGN KEY (ansvar_id) REFERENCES dim_organisasjon(ansvar_id),
+            FOREIGN KEY (art_id) REFERENCES dim_kostra_kontoplan(art_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS fact_budget_allocations (
+            budsjett_id VARCHAR(50) PRIMARY KEY,
+            aar INT NOT NULL,
+            periode INT NOT NULL CHECK (periode BETWEEN 1 AND 12),
+            ansvar_id VARCHAR(10) NOT NULL,
+            art_id VARCHAR(10) NOT NULL,
+            vedtatt_budsjett DECIMAL(15, 2) DEFAULT 0.00,
+            regulert_budsjett DECIMAL(15, 2) DEFAULT 0.00,
+            periodisert_budsjett DECIMAL(15, 2) DEFAULT 0.00,
+            oppdatert_dato TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (ansvar_id) REFERENCES dim_organisasjon(ansvar_id),
+            FOREIGN KEY (art_id) REFERENCES dim_kostra_kontoplan(art_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS sec_user_permissions (
+            bruker_id VARCHAR(50) NOT NULL,
+            rolle VARCHAR(30) NOT NULL,
+            ansvar_id VARCHAR(10) NOT NULL,
+            gyldig_fra DATE DEFAULT CURRENT_DATE,
+            gyldig_til DATE,
+            PRIMARY KEY (bruker_id, ansvar_id)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_erp_ansvar_art ON fact_erp_transactions(ansvar_id, art_id);
+        CREATE INDEX IF NOT EXISTS idx_erp_dato ON fact_erp_transactions(dato_key);
+        CREATE INDEX IF NOT EXISTS idx_budget_ansvar_periode ON fact_budget_allocations(ansvar_id, aar, periode);
+        CREATE INDEX IF NOT EXISTS idx_rbac_bruker ON sec_user_permissions(bruker_id);
+    """)
+
     conn.commit()
     conn.close()
 
@@ -181,6 +264,94 @@ def populate_demo_erp_data():
         """, [r[1:] for r in demo_rows])
 
     print("  [OK] Synkroniserte YTD M8 ERP-transaksjoner for test.")
+
+    # Synkroniser Star Schema-tabeller (dim_organisasjon, dim_kostra_kontoplan, fact_erp_transactions, fact_budget_allocations, sec_user_permissions)
+    org_rows = [
+        ("2530", "Randesund Omsorgssenter", "Randesund Omsorgssenter", "Heldøgns omsorg", "Helse og Mestring", "LED-2530"),
+        ("2580", "Hjemmetjenesten Vågsbygd", "Hjemmetjenesten Vågsbygd", "Hjemmebaserte tjenester", "Helse og Mestring", "LED-2580"),
+        ("2540", "Strømmehaven", "Strømmehaven", "Heldøgns omsorg", "Helse og Mestring", "LED-2540"),
+        ("2330", "Mestringsenheten", "Mestringsenheten", "Mestring og helse", "Helse og Mestring", "LED-2330"),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO dim_organisasjon (
+            ansvar_id, ansvar_navn, enhet_navn, kommunalsjef_omrade, sektor, enhetsleder_ansatt_id
+        ) VALUES (?, ?, ?, ?, ?, ?)
+    """, org_rows)
+
+    kostra_rows = [
+        ("101000", "Fast lønn", "Lønn og sosiale utgifter", "253", "Pleie og omsorg", 1, 1),
+        ("109000", "Overtid", "Lønn og sosiale utgifter", "253", "Pleie og omsorg", 1, 0),
+        ("110000", "Innleie/Vikarer", "Lønn og sosiale utgifter", "253", "Pleie og omsorg", 1, 0),
+        ("169000", "Sykelønnsrefusjon NAV", "Refusjoner og overføringer", "253", "Pleie og omsorg", 1, 0),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO dim_kostra_kontoplan (
+            art_id, art_navn, artsgruppe, funksjon_id, funksjon_navn, kontoklasse, skjermet_for_kutt
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, kostra_rows)
+
+    tid_rows = [
+        (20260815, "2026-08-15", 2026, 8, 3, 2),
+        (20260818, "2026-08-18", 2026, 8, 3, 2),
+        (20260820, "2026-08-20", 2026, 8, 3, 2),
+        (20260821, "2026-08-21", 2026, 8, 3, 2),
+        (20260822, "2026-08-22", 2026, 8, 3, 2),
+        (20260825, "2026-08-25", 2026, 8, 3, 2),
+        (20260828, "2026-08-28", 2026, 8, 3, 2),
+        (20260829, "2026-08-29", 2026, 8, 3, 2),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO dim_tid (dato_key, dato, aar, periode, kvartal, tertial)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, tid_rows)
+
+    fact_rows = [
+        ("TX-1001", 20260815, "2530", "101000", "0000", 12150000.0, "BIL-1001", "Lønnsutbetaling faste stillinger YTD", "Unit4 ERP"),
+        ("TX-1002", 20260818, "2530", "109000", "TORN-01", 1150000.0, "BIL-1002", "Helgedekning og beordret overtid", "Unit4 ERP"),
+        ("TX-1003", 20260820, "2530", "110000", "TORN-01", 850000.0, "BIL-1003", "Sykefraværsvikarer døgnpleie", "Unit4 ERP"),
+        ("TX-1010", 20260821, "2530", "169000", "0000", -500000.0, "BIL-1010", "Mottatt sykelønnsrefusjon (etterslep 300k)", "Unit4 ERP"),
+        ("TX-1004", 20260822, "2580", "101000", "0000", 9680000.0, "BIL-1004", "Fastlønn hjemmesykepleie YTD", "Unit4 ERP"),
+        ("TX-1005", 20260825, "2580", "109000", "TORN-02", 690000.0, "BIL-1005", "Ekstraomganger sommeravvikling", "Unit4 ERP"),
+        ("TX-1006", 20260828, "2330", "169000", "0000", -460000.0, "BIL-1006", "Sykelønnsrefusjon Q2", "Unit4 ERP"),
+        ("TX-1007", 20260828, "2330", "101000", "0000", 6690000.0, "BIL-1007", "Fastlønn forebyggende team YTD", "Unit4 ERP"),
+        ("TX-1008", 20260828, "2540", "101000", "0000", 11340000.0, "BIL-1008", "Fastlønn døgnomsorg YTD", "Unit4 ERP"),
+        ("TX-1009", 20260829, "2540", "109000", "TORN-01", 620000.0, "BIL-1009", "Helgeovertid YTD", "Unit4 ERP"),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO fact_erp_transactions (
+            transaksjon_id, dato_key, ansvar_id, art_id, prosjekt_id, belop, bilagsnummer, tekst_beskrivelse, kilde_system
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, fact_rows)
+
+    budget_rows = [
+        ("BUD-2530-101000", 2026, 8, "2530", "101000", 18000000.0, 18000000.0, 12000000.0),
+        ("BUD-2530-109000", 2026, 8, "2530", "109000", 600000.0, 600000.0, 400000.0),
+        ("BUD-2530-110000", 2026, 8, "2530", "110000", 450000.0, 450000.0, 300000.0),
+        ("BUD-2530-169000", 2026, 8, "2530", "169000", -1200000.0, -1200000.0, -800000.0),
+        ("BUD-2580-101000", 2026, 8, "2580", "101000", 14400000.0, 14400000.0, 9600000.0),
+        ("BUD-2580-109000", 2026, 8, "2580", "109000", 360000.0, 360000.0, 240000.0),
+        ("BUD-2330-101000", 2026, 8, "2330", "101000", 10200000.0, 10200000.0, 6800000.0),
+        ("BUD-2330-169000", 2026, 8, "2330", "169000", -600000.0, -600000.0, -400000.0),
+        ("BUD-2540-101000", 2026, 8, "2540", "101000", 16800000.0, 16800000.0, 11200000.0),
+        ("BUD-2540-109000", 2026, 8, "2540", "109000", 540000.0, 540000.0, 360000.0),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO fact_budget_allocations (
+            budsjett_id, aar, periode, ansvar_id, art_id, vedtatt_budsjett, regulert_budsjett, periodisert_budsjett
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, budget_rows)
+
+    rbac_rows = [
+        ("enhetsleder@kristiansand.kommune.no", "enhetsleder", "2530"),
+        ("kommunalsjef@kristiansand.kommune.no", "kommunalsjef", "*"),
+        ("frank.ellingsen@kristiansand.kommune.no", "direktor", "*"),
+        ("revisor@kristiansand.kommune.no", "revisor", "*"),
+    ]
+    cursor.executemany("""
+        INSERT OR REPLACE INTO sec_user_permissions (bruker_id, rolle, ansvar_id)
+        VALUES (?, ?, ?)
+    """, rbac_rows)
+    print("  [OK] Synkroniserte Star Schema (dim_organisasjon, dim_kostra_kontoplan, fact_erp_transactions, fact_budget_allocations, sec_user_permissions).")
 
     conn.commit()
     conn.close()
