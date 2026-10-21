@@ -1,6 +1,6 @@
 # app/schemas.py - Datakontrakter inkludert RBAC, Sikkerhet, Audit Log og Økonomiverktøy
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 
 
@@ -136,3 +136,49 @@ class BudgetReallocationInput(BaseModel):
     user_context: Optional[UserContext] = Field(
         default=None, description="Brukerkontekst for tilgangskontroll."
     )
+
+
+class TimeVisualRecommendationInput(BaseModel):
+    query: str = Field(
+        ...,
+        description="Brukerspørring om tidsutvikling, prognose, avvik eller komponenter.",
+    )
+    periods: int = Field(
+        default=12, description="Antall tidsperioder (f.eks. 12 måneder eller 3 tertialer)."
+    )
+    has_target: bool = Field(
+        default=True, description="Om tidsserien har et budsjettmål/referanselinje (BAC)."
+    )
+    has_components: bool = Field(
+        default=False, description="Om tidsserien brytes ned på flere artskomponenter."
+    )
+    has_uncertainty: bool = Field(
+        default=False, description="Om tidsserien inkluderer prognoseusikkerhet (P10/P50/P90)."
+    )
+
+
+# ============================================================
+# CONTROL OFFICE HUB & VISUAL SANDBOX SCHEMAS (AI_mvp_update2)
+# ============================================================
+
+class UserRole(BaseModel):
+    user_id: str
+    role: str = Field(..., description="enhetsleder, kommunalsjef, okonomidirektor, revisor")
+    ansvar_access: List[str] = Field(default_factory=list)
+
+
+class AuditEntry(BaseModel):
+    user_id: str
+    role: str
+    action_category: str
+    ansvar_spurt_om: Optional[str] = None
+    query_text: str
+    ai_summary: Optional[str] = None
+
+
+class ReallocationRequest(BaseModel):
+    fra_ansvar: str
+    til_ansvar: str
+    belop: float
+    begrunnelse: str
+    requires_political_approval: bool = False

@@ -5,7 +5,7 @@ import sqlite3
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
 import pandas as pd
 import requests
@@ -26,7 +26,9 @@ try:
         SalaryBudgetingInput,
         BudgetDrillDownInput,
         BudgetReallocationInput,
+        TimeVisualRecommendationInput,
     )
+    from app.visual_sandbox import get_time_visual_recommendation
 except ImportError:
     from schemas import (
         UserContext,
@@ -39,7 +41,9 @@ except ImportError:
         SalaryBudgetingInput,
         BudgetDrillDownInput,
         BudgetReallocationInput,
+        TimeVisualRecommendationInput,
     )
+    from visual_sandbox import get_time_visual_recommendation
 
 # Konfigurer strukturert systemlogging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -775,3 +779,116 @@ def process_budget_reallocation(
         "tidsstempel": datetime.now().isoformat(),
     }
     return json.dumps(res, ensure_ascii=False, indent=2)
+
+
+# ============================================================
+# 5. TIME-VISUALS CHAT REASONING & CONTROL OFFICE HUB TOOLS
+# ============================================================
+
+def log_to_audit(
+    db_path: str,
+    user_id: str,
+    role: str,
+    category: str,
+    query: str,
+    summary: str,
+) -> None:
+    """Bakoverkompatibel audit-logger for Control Office Hub Subgraphs (AI_mvp_update2)."""
+    write_audit_log(user_id=user_id, role=role, action_type=category, query=query, summary=summary)
+
+
+def rag_search_documents(
+    db_path: str = DB_PATH,
+    query: str = "",
+    sektor: str = "Helse og mestring",
+    ansvar_id: Optional[str] = None,
+) -> list:
+    """
+    Søker i rag_documents (med fallback til knowledge_chunks) for relevante styringsdokumenter,
+    tertialrapporter og veiledere.
+    """
+    target_db = db_path if os.path.exists(db_path) else DB_PATH
+    try:
+        conn = sqlite3.connect(target_db)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='rag_documents';"
+        )
+        has_rag_docs = cursor.fetchone() is not None
+
+        matched = []
+        q_words = [w.lower() for w in query.split() if len(w) > 3]
+
+        if has_rag_docs:
+            sql = """
+                SELECT title, document_type, content
+                FROM rag_documents
+                WHERE (LOWER(sektor) = LOWER(?) OR sektor = 'Konsern' OR sektor IS NULL)
+            """
+            params = [sektor]
+            if ansvar_id and ansvar_id != "*":
+                sql += " AND (ansvar_id = ? OR ansvar_id = '*' OR ansvar_id IS NULL)"
+                params.append(ansvar_id)
+            cursor.execute(sql, params)
+            rows = cursor.fetchall()
+            for title, doc_type, content in rows:
+                if any(w in (content or "").lower() for w in q_words) or not q_words:
+                    matched.append(
+                        {"title": title, "doc_type": doc_type, "content": (content or "")[:400]}
+                    )
+
+        if not matched:
+            cursor.execute("SELECT source_file, page, content FROM knowledge_chunks LIMIT 200;")
+            for source_file, page, content in cursor.fetchall():
+                if any(w in (content or "").lower() for w in q_words) or not q_words:
+                    matched.append(
+                        {
+                            "title": f"{source_file} (s. {page})",
+                            "doc_type": "Styringsdokument / PDF",
+                            "content": (content or "")[:400],
+                        }
+                    )
+                    if len(matched) >= 5:
+                        break
+        conn.close()
+        return matched[:5]
+    except Exception as e:
+        logger.error(f"Feil i rag_search_documents: {e}")
+        return []
+
+
+def recommend_visual_for_chat_response(
+    query: Union[TimeVisualRecommendationInput, str],
+    data_summary: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """
+    AI Chat Engine Tool: Anbefaler og konfigurerer Time-Visuals (Time-Visuals.pdf 60 Suite)
+    eller FT Visual Vocabulary for å forklare dataforhold visuelt i chaten.
+    """
+    if isinstance(query, TimeVisualRecommendationInput):
+        q_str = query.query
+        summary_dict = {
+            "periods": query.periods,
+            "has_target": query.has_target,
+            "has_components": query.has_components,
+            "has_uncertainty": query.has_uncertainty,
+        }
+    else:
+        q_str = str(query)
+        summary_dict = data_summary or {
+            "periods": 12,
+            "has_target": True,
+            "has_components": any(w in q_str.lower() for w in ["komponent", "art", "lønn", "fordeling"]),
+            "has_uncertainty": any(w in q_str.lower() for w in ["prognose", "eoy", "eac", "monte carlo"]),
+        }
+
+    rec = get_time_visual_recommendation(q_str, summary_dict)
+    addon = (
+        f"\n\n📊 **Visuelt forslag ({rec['chart_type']}):**\n"
+        f"*Anbefalt diagram:* {rec['chart_type']} (Time-Visuals #{rec['time_visual_id']})\n"
+        f"*Begrunnelse:* {rec['reasoning']}"
+    )
+    return {
+        "visual_recommendation": rec,
+        "chat_prompt_addon": addon,
+    }

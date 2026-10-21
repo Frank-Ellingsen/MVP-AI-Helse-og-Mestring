@@ -694,7 +694,49 @@
         <svg id="waterfallSvg" class="tufte-svg" viewBox="0 0 920 270"></svg>
       </div>
 
+      <!-- Chart 5 & 6: Time-Visuals Sandbox (60 Ways to Visualize Time) & CPI Lollipop Ranking -->
+      <div class="grid-2" style="margin-top: 18px;">
+        <div class="chart-section" style="margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div class="chart-title" id="timeVisualTitle">Time-Visuals (60 Suite): Fan Chart (P10/P50/P90)</div>
+            <select id="timeVisualSelect" style="width: 240px; font-size: 12px; padding: 4px 6px;">
+              <option value="FAN">11/12 Fan Chart (P10/P50/P90)</option>
+              <option value="MA3">11/18 3M Glidende Snitt (Moving Avg)</option>
+              <option value="SLOPE">40/41 Slope Graph (T1 vs. T2)</option>
+            </select>
+          </div>
+          <div class="chart-subtitle" id="timeVisualSubtitle">Monte Carlo usikkerhetskonvolutt (P10–P90) og P50-prognose mot vedtatt årsbudsjett (BAC).</div>
+          <svg id="timeVisualSvg" class="tufte-svg" viewBox="0 0 460 240"></svg>
+        </div>
+
+        <div class="chart-section" style="margin-bottom: 0;">
+          <div class="chart-title">FT Ranking: Cost Performance Index (CPI Lollipop)</div>
+          <div class="chart-subtitle">Minimal-ink rangering per omsorgsenhet mot balanseterskel CPI = 1,00.</div>
+          <svg id="lollipopCpiSvg" class="tufte-svg" viewBox="0 0 460 240"></svg>
+        </div>
+      </div>
+
       <details style="margin-top: 16px; border-top: 1px solid var(--border-hairline); padding-top: 10px;">
+        <summary style="cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-primary);">
+          Ferdige Power BI DAX-Mål (Star Schema — HM_EOY_Avvik_Prognose &amp; HM_Cost_Performance_Index)
+        </summary>
+        <div class="grid-2" style="margin-top: 10px;">
+          <pre style="background: var(--bg-subtle); border: 1px solid var(--border-hairline); padding: 10px; font-family: var(--font-mono); font-size: 11.5px; overflow-x: auto;">HM_EOY_Avvik_Prognose = 
+VAR _MndPassert = MAX(dim_tid[periode])
+VAR _RegnskapYTD = CALCULATE(SUM(fact_erp_transactions[belop]), DATESYTD(dim_tid[dato]))
+VAR _VedtattAarsbudsjett = CALCULATE(SUM(fact_budget_allocations[regulert_budsjett]), ALL(dim_tid[periode]))
+VAR _LineaerEAC = DIVIDE(_RegnskapYTD, _MndPassert, 0) * 12
+RETURN
+    _LineaerEAC - _VedtattAarsbudsjett</pre>
+          <pre style="background: var(--bg-subtle); border: 1px solid var(--border-hairline); padding: 10px; font-family: var(--font-mono); font-size: 11.5px; overflow-x: auto;">HM_Cost_Performance_Index = 
+VAR _PeriodisertBudsjettYTD = CALCULATE(SUM(fact_budget_allocations[periodisert_budsjett]), DATESYTD(dim_tid[dato]))
+VAR _RegnskapYTD = CALCULATE(SUM(fact_erp_transactions[belop]), DATESYTD(dim_tid[dato]))
+RETURN
+    ROUND(DIVIDE(_PeriodisertBudsjettYTD, _RegnskapYTD, 1.00), 2)</pre>
+        </div>
+      </details>
+
+      <details style="margin-top: 12px; border-top: 1px solid var(--border-hairline); padding-top: 10px;">
         <summary style="cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-primary);">
           Vis Financial Times Visual Vocabulary Referanseoversikt (ft-Viz-Guide.png)
         </summary>
@@ -1147,7 +1189,43 @@
       }
 
       writeAuditLog("AGENT_QUERY", q, "Besvart via lokal Golden Record-motor");
-      appendChatMessage("assistant", answer);
+      const rec = getTimeVisualRecommendation(q);
+      const visualAddon = `\n\n📊 Visuelt forslag (${rec.chart_type}):\n• Anbefalt diagram: ${rec.chart_type} (Time-Visuals #${rec.time_visual_id})\n• Begrunnelse: ${rec.reasoning}`;
+      appendChatMessage("assistant", answer + visualAddon);
+    }
+
+    function getTimeVisualRecommendation(query) {
+      const q = (query || "").toLowerCase();
+      if (q.includes("prognose") || q.includes("eoy") || q.includes("eac") || q.includes("etc") || q.includes("monte carlo")) {
+        return {
+          chart_type: "Fan Chart (P10/P50/P90)",
+          time_visual_id: "11/12 Usikkerhetsvifte",
+          reasoning: "Viser rullende regnskap YTD med Monte Carlo usikkerhetskonvolutt (P10–P90) mot BAC."
+        };
+      } else if (q.includes("akkumulert") || q.includes("ytd") || q.includes("avvik")) {
+        return {
+          chart_type: "Running Total Area Chart",
+          time_visual_id: "24 Running Total Area",
+          reasoning: "Akkumulerer månedlige avvik gjennom året for å vise total belastning på kommunekassen."
+        };
+      } else if (q.includes("tertial") || q.includes("t1") || q.includes("t2")) {
+        return {
+          chart_type: "Slope Graph",
+          time_visual_id: "40/41 Slope Graph",
+          reasoning: "Viser helningsvinkel for endring i avvik og CPI fra T1 til T2 per omsorgssenter."
+        };
+      } else if (q.includes("overtid") || q.includes("vikar") || q.includes("sykefravær") || q.includes("trend")) {
+        return {
+          chart_type: "Continuous Line + Moving Average (3M)",
+          time_visual_id: "11/18 Moving Average Line",
+          reasoning: "Glatter ut månedlige svingninger (feriepenger/refusjoner) for å vise underliggende kostnadstrend."
+        };
+      }
+      return {
+        chart_type: "Continuous Line with Markers & Reference Line",
+        time_visual_id: "03/33 Line Chart w/ Reference Line",
+        reasoning: "Klassisk kontinuerlig tidsrekke med budsjettreferanselinje (BAC/PV) og direkte endepunktmerking."
+      };
     }
 
     document.getElementById("sendChatBtn").addEventListener("click", () => handleChatSubmit());
@@ -1576,9 +1654,125 @@
         }
       });
       wfSvg.innerHTML = wfHtml;
+
+      // 5. Time-Visuals Sandbox (Fan Chart P10/P50/P90, 3M Moving Average, Slope Graph T1 vs T2)
+      const tvType = document.getElementById("timeVisualSelect")?.value || "FAN";
+      const tvSvg = document.getElementById("timeVisualSvg");
+      const tvTitle = document.getElementById("timeVisualTitle");
+      const tvSub = document.getElementById("timeVisualSubtitle");
+      if (tvSvg) {
+        if (tvType === "FAN") {
+          tvTitle.textContent = "Time-Visuals #11/12: Fan Chart (P10/P50/P90)";
+          tvSub.textContent = "Monte Carlo usikkerhetskonvolutt (P10–P90) og P50-prognose mot vedtatt årsbudsjett (BAC).";
+          const fx0 = 40, fx1 = 345, fy0 = 205, fy1 = 22;
+          const fMax = Math.max(28, Math.ceil(eacEnd * 1.15));
+          const fx = (i) => fx0 + (i / 11) * (fx1 - fx0);
+          const fy = (v) => fy0 - (v / fMax) * (fy0 - fy1);
+          const p50 = [7, 8, 9, 10, 11].map((mIdx, k) => ({ i: mIdx, v: prof.acM8 + ((eacEnd - prof.acM8) * k) / 4 }));
+          const p90 = p50.map((pt, k) => ({ i: pt.i, v: pt.v + k * 0.48 }));
+          const p10 = p50.map((pt, k) => ({ i: pt.i, v: pt.v - k * 0.42 }));
+          const fanPoly = [
+            ...p90.map((pt) => `${fx(pt.i).toFixed(1)},${fy(pt.v).toFixed(1)}`),
+            ...[...p10].reverse().map((pt) => `${fx(pt.i).toFixed(1)},${fy(pt.v).toFixed(1)}`)
+          ].join(" ");
+          const acPts = acCum.map((v, i) => `${fx(i).toFixed(1)},${fy(v).toFixed(1)}`).join(" ");
+          const p50Pts = p50.map((pt) => `${fx(pt.i).toFixed(1)},${fy(pt.v).toFixed(1)}`).join(" ");
+          const bacPts = bacCum.map((v, i) => `${fx(i).toFixed(1)},${fy(v).toFixed(1)}`).join(" ");
+          tvSvg.innerHTML = `
+            <line x1="${fx0}" y1="${fy0}" x2="${fx1}" y2="${fy0}" stroke="#111827" stroke-width="1" />
+            <polygon points="${fanPoly}" fill="rgba(185, 28, 28, 0.16)" stroke="none" />
+            <polyline fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3" points="${bacPts}" />
+            <polyline fill="none" stroke="#111827" stroke-width="2.4" points="${acPts}" />
+            <polyline fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-dasharray="4,3" points="${p50Pts}" />
+            <text x="${fx(11) + 6}" y="${fy(p90[4].v) + 3}" font-size="10.5" fill="#b45309">P90: ${p90[4].v.toFixed(1)}M</text>
+            <text x="${fx(11) + 6}" y="${fy(p50[4].v) + 4}" font-size="11" font-weight="600" fill="#b91c1c">P50: ${p50[4].v.toFixed(1)}M</text>
+            <text x="${fx(11) + 6}" y="${fy(p10[4].v) + 4}" font-size="10.5" fill="#475569">P10: ${p10[4].v.toFixed(1)}M</text>
+          `;
+        } else if (tvType === "MA3") {
+          tvTitle.textContent = "Time-Visuals #11/18: 3M Glidende Snitt";
+          tvSub.textContent = "Glatter ut månedlige svingninger (feriepenger/refusjoner) mot månedlig budsjettramme.";
+          const mx0 = 40, mx1 = 350, my0 = 205, my1 = 24;
+          const rawM = [2.15, 2.28, 2.35, 2.18, 2.25, 2.42, 2.52, 2.35, 2.30, 2.28, 2.32, 2.35];
+          const ma3 = rawM.map((_, i) => {
+            const sl = rawM.slice(Math.max(0, i - 2), i + 1);
+            return sl.reduce((a, b) => a + b, 0) / sl.length;
+          });
+          const mx = (i) => mx0 + (i / 11) * (mx1 - mx0);
+          const my = (v) => my0 - ((v - 1.5) / 1.4) * (my0 - my1);
+          const rawPts = rawM.map((v, i) => `${mx(i).toFixed(1)},${my(v).toFixed(1)}`).join(" ");
+          const maPts = ma3.map((v, i) => `${mx(i).toFixed(1)},${my(v).toFixed(1)}`).join(" ");
+          tvSvg.innerHTML = `
+            <line x1="${mx0}" y1="${my0}" x2="${mx1}" y2="${my0}" stroke="#111827" stroke-width="1" />
+            <line x1="${mx0}" y1="${my(2.0)}" x2="${mx1}" y2="${my(2.0)}" stroke="#64748b" stroke-dasharray="3,3" stroke-width="1.4" />
+            <polyline fill="none" stroke="#94a3b8" stroke-width="1.5" points="${rawPts}" />
+            <polyline fill="none" stroke="#b91c1c" stroke-width="2.6" points="${maPts}" />
+            <text x="${mx1 + 6}" y="${my(ma3[11]) + 4}" font-size="11" font-weight="600" fill="#b91c1c">3M Snitt: ${ma3[11].toFixed(2)}M</text>
+            <text x="${mx1 + 6}" y="${my(2.0) + 4}" font-size="10.5" fill="#475569">BAC: 2,00M</text>
+          `;
+        } else {
+          tvTitle.textContent = "Time-Visuals #40/41: Slope Graph (T1 vs. T2)";
+          tvSub.textContent = "Endring i akkumulert merforbruk (MNOK) fra 1. tertial (T1) til 2. tertial (T2).";
+          const sx1 = 135, sx2 = 310, sy0 = 205, sy1 = 28;
+          const sy = (v) => sy0 - ((v + 0.3) / 2.3) * (sy0 - sy1);
+          const slopes = [
+            { name: "2530 Randesund", t1: 1.15, t2: 1.75, col: "#b91c1c" },
+            { name: "2580 Vågsbygd", t1: 0.72, t2: 1.12, col: "#b91c1c" },
+            { name: "2540 Strømmehaven", t1: 0.48, t2: 0.40, col: "#475569" },
+            { name: "2330 Mestring", t1: -0.05, t2: -0.17, col: "#334155" }
+          ];
+          let slHtml = `
+            <line x1="${sx1}" y1="${sy1}" x2="${sx1}" y2="${sy0}" stroke="#d1d5db" stroke-width="1" />
+            <line x1="${sx2}" y1="${sy1}" x2="${sx2}" y2="${sy0}" stroke="#d1d5db" stroke-width="1" />
+            <text x="${sx1}" y="${sy0 + 18}" text-anchor="middle" font-size="11" font-weight="600" fill="#111827">1. Tertial (T1)</text>
+            <text x="${sx2}" y="${sy0 + 18}" text-anchor="middle" font-size="11" font-weight="600" fill="#111827">2. Tertial (T2)</text>
+          `;
+          slopes.forEach((s) => {
+            slHtml += `
+              <line x1="${sx1}" y1="${sy(s.t1).toFixed(1)}" x2="${sx2}" y2="${sy(s.t2).toFixed(1)}" stroke="${s.col}" stroke-width="2.3" />
+              <circle cx="${sx1}" cy="${sy(s.t1).toFixed(1)}" r="4" fill="${s.col}" />
+              <circle cx="${sx2}" cy="${sy(s.t2).toFixed(1)}" r="4" fill="${s.col}" />
+              <text x="${sx1 - 8}" y="${sy(s.t1) + 4}" text-anchor="end" font-size="10.5" fill="${s.col}">${s.name} (${s.t1 > 0 ? "+" : ""}${s.t1.toFixed(2)}M)</text>
+              <text x="${sx2 + 8}" y="${sy(s.t2) + 4}" text-anchor="start" font-size="10.5" font-weight="600" fill="${s.col}">${s.t2 > 0 ? "+" : ""}${s.t2.toFixed(2)}M</text>
+            `;
+          });
+          tvSvg.innerHTML = slHtml;
+        }
+      }
+
+      // 6. CPI Lollipop Ranking SVG
+      const lolSvg = document.getElementById("lollipopCpiSvg");
+      if (lolSvg) {
+        const cpiRows = [
+          { name: "2530 Randesund", cpi: 0.87 },
+          { name: "BOMILJO Boenhet", cpi: 0.92 },
+          { name: "2580 Vågsbygd", cpi: 0.94 },
+          { name: "2540 Strømmehaven", cpi: 0.97 },
+          { name: "2330 Mestring", cpi: 1.03 }
+        ];
+        const lx0 = 140, lx1 = 415;
+        const lx = (v) => lx0 + ((v - 0.80) / 0.30) * (lx1 - lx0);
+        const refX = lx(1.0);
+        let lolHtml = `
+          <line x1="${refX.toFixed(1)}" y1="18" x2="${refX.toFixed(1)}" y2="210" stroke="#111827" stroke-dasharray="3,3" stroke-width="1.2" />
+          <text x="${refX.toFixed(1)}" y="13" text-anchor="middle" font-size="10.5" font-weight="600" fill="#111827">Balanse CPI = 1,00</text>
+        `;
+        cpiRows.forEach((r, idx) => {
+          const y = 38 + idx * 36;
+          const cx = lx(r.cpi);
+          const col = r.cpi < 0.93 ? "#b91c1c" : (r.cpi < 0.98 ? "#b45309" : "#334155");
+          lolHtml += `
+            <text x="${lx0 - 8}" y="${y + 4}" text-anchor="end" font-size="11.5" fill="#111827">${r.name}</text>
+            <line x1="${refX.toFixed(1)}" y1="${y}" x2="${cx.toFixed(1)}" y2="${y}" stroke="${col}" stroke-width="2.5" />
+            <circle cx="${cx.toFixed(1)}" cy="${y}" r="5" fill="${col}" />
+            <text x="${(r.cpi >= 1.0 ? cx + 8 : cx - 8).toFixed(1)}" y="${y + 4}" text-anchor="${r.cpi >= 1.0 ? "start" : "end"}" font-size="11" font-family="monospace" font-weight="600" fill="${col}">${r.cpi.toFixed(2)}</text>
+          `;
+        });
+        lolSvg.innerHTML = lolHtml;
+      }
     }
 
     document.getElementById("ftUnitSelect").addEventListener("change", renderTufteCharts);
+    document.getElementById("timeVisualSelect")?.addEventListener("change", renderTufteCharts);
 
     // =========================================================================
     // 7. FANE 4: EOY PROGNOSE (EAC/ETC) & LØNNSBUDSJETTERING

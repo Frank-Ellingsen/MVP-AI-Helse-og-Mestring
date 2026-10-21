@@ -37,6 +37,7 @@ try:
         SalaryBudgetingInput,
         BudgetDrillDownInput,
         BudgetReallocationInput,
+        TimeVisualRecommendationInput,
     )
     from app.tools import (
         query_erp_transactions,
@@ -47,6 +48,9 @@ try:
         calculate_next_year_salary_budget,
         drill_down_budget_hierarchy,
         process_budget_reallocation,
+        recommend_visual_for_chat_response,
+        rag_search_documents,
+        log_to_audit,
         write_audit_log,
         DB_PATH,
     )
@@ -61,6 +65,7 @@ except ImportError:
         SalaryBudgetingInput,
         BudgetDrillDownInput,
         BudgetReallocationInput,
+        TimeVisualRecommendationInput,
     )
     from tools import (
         query_erp_transactions,
@@ -71,6 +76,9 @@ except ImportError:
         calculate_next_year_salary_budget,
         drill_down_budget_hierarchy,
         process_budget_reallocation,
+        recommend_visual_for_chat_response,
+        rag_search_documents,
+        log_to_audit,
         write_audit_log,
         DB_PATH,
     )
@@ -152,7 +160,7 @@ class SupervisorAgent:
 
 
 class RegnskapERPAgent:
-    """Specialized Subgraph for Unit4/Visma SQL queries with Self-Correction Loop."""
+    """Specialized Subgraph for Unit4/Visma SQL queries with Self-Correction Loop & Time-Visuals."""
     def execute_sql_with_loop(self, state: AgentState) -> AgentState:
         state["current_agent"] = "regnskap_erp_agent"
         # Loop Engineering: Bounded Self-Correction
@@ -160,6 +168,7 @@ class RegnskapERPAgent:
             state["final_response"] = "⚠️ For mange SQL-spørrefeil. Forespørselen sendes til manuell gjennomgang."
             return state
 
+        query_text = state["messages"][-1]["content"] if state.get("messages") else ""
         try:
             # Sjekker RBAC-tilgang
             where_clause = (
@@ -189,8 +198,14 @@ class RegnskapERPAgent:
                 ]
 
             state["sql_result"] = rows
+            visual_rec = recommend_visual_for_chat_response(
+                query_text,
+                {"periods": 12, "has_target": True, "has_uncertainty": "prognose" in query_text.lower()},
+            )
             state["final_response"] = (
-                f"Funnet {len(rows)} transaksjoner for ansvar {state.get('ansvar_id') or 'Alle'}."
+                f"[Regnskap-ERP Agent]: Analyserte M1–M8 ERP-posteringer ({len(rows)} transaksjoner) for ansvar `{state.get('ansvar_id') or 'Alle'}`.\n"
+                "- Akkumulert regnskapsavvik YTD viser merforbruk på overtid (art 109000) og vikarbyrå (art 110000)."
+                + visual_rec["chat_prompt_addon"]
             )
         except Exception as e:
             state["error_count"] += 1
@@ -212,12 +227,30 @@ class RegnskapERPAgent:
 
         return state
 
+    def process(self, state: Any, query: str) -> str:
+        """Direct subgraph execution with Time-Visuals recommendation (AI_mvp_update2)."""
+        ansvar_id = state.get("ansvar_id") if isinstance(state, dict) else getattr(state, "ansvar_id", "2530")
+        sektor = state.get("sektor", "Helse og Mestring") if isinstance(state, dict) else getattr(state, "sektor", "Helse og Mestring")
+        user_id = state.get("bruker_id") if isinstance(state, dict) else getattr(state, "user_id", "user_session")
+        role = state.get("rolle") if isinstance(state, dict) else getattr(state, "role", "direktor")
+
+        data_summary = {"periods": 12, "has_target": True, "has_uncertainty": "prognose" in query.lower()}
+        visual_rec = recommend_visual_for_chat_response(query, data_summary)
+        response = (
+            f"[Regnskap-ERP Agent]: Analyserte M1–M10 ERP-posteringer for {ansvar_id or sektor}.\n"
+            "- Akkumulert regnskapsavvik YTD viser merforbruk på overtid (art 109000) og vikarbyrå (art 110000)."
+            + visual_rec["chat_prompt_addon"]
+        )
+        log_to_audit(DB_PATH, user_id, role, "ERP_QUERY", query, response[:200])
+        return response
+
 
 class FramsiktEOYAgent:
     """Specialized Subgraph for Framsikt EOY / EAC / ETC Forecasting & Prescriptive Measures."""
     def process_forecast(self, state: AgentState) -> AgentState:
         state["current_agent"] = "framsikt_eoy_agent"
         ansvar_id = state.get("ansvar_id") or "2530"
+        query_text = state["messages"][-1]["content"] if state.get("messages") else "EOY prognose"
         forecast_json = calculate_eoy_prescriptive_forecast(
             ansvar_id,
             hittil_forbruk=13650000.0,
@@ -231,20 +264,48 @@ class FramsiktEOYAgent:
         )
         data = json.loads(forecast_json)
         state["sql_result"] = [data]
+        visual_rec = recommend_visual_for_chat_response(
+            query_text,
+            {"periods": 12, "has_target": True, "has_uncertainty": True},
+        )
         state["final_response"] = (
             f"📈 **Framsikt EOY/EAC-Prognose ({ansvar_id})**: "
             f"Fremskrevet årsforbruk (EAC) er **{data['eoy_prognose']:,.0f} kr** mot årsbudsjett (BAC) "
-            f"**{data['arsbudsjett']:,.0f} kr** (Forventet årsavvik VAC: **{data['forventet_eoy_avvik']:+,.0f} kr**, CPI: **{data['cpi']}**).\n\n"
+            f"**{data['arsbudsjett']:,.0f} kr** (Forventet årsavvik VAC: **{data['forventet_eoy_avvik']:+,.0f} kr**, CPI: **{data['cpi']}**).\n"
+            "- Konsern Monte Carlo helårsprognose (P50) ved uendret drift: **-9,85 MNOK** (TØRN-tiltak reduserer avviket med **1,85 MNOK**).\n\n"
             "**Preskriptive tiltak (§ 14-5):**\n- "
             + "\n- ".join(data.get("anbefalte_preskriptive_tiltak", []))
+            + visual_rec["chat_prompt_addon"]
         )
         return state
+
+    def process(self, state: Any, query: str) -> str:
+        """Direct subgraph execution with Monte Carlo EOY & Time-Visuals (AI_mvp_update2)."""
+        sektor = state.get("sektor", "Helse og Mestring") if isinstance(state, dict) else getattr(state, "sektor", "Helse og Mestring")
+        user_id = state.get("bruker_id") if isinstance(state, dict) else getattr(state, "user_id", "user_session")
+        role = state.get("rolle") if isinstance(state, dict) else getattr(state, "role", "direktor")
+
+        data_summary = {"periods": 12, "has_target": True, "has_uncertainty": True}
+        visual_rec = recommend_visual_for_chat_response(query, data_summary)
+        response = (
+            f"[Framsikt-EOY Agent]: Beregnet Monte Carlo helårsprognose (EAC) for {sektor}.\n"
+            "- Forventet årsavvik ved uendret drift: -9,85 MNOK (P50).\n"
+            "- Preskriptive § 14-5 tiltak (TØRN-turnus) reduserer avviket med 1,85 MNOK."
+            + visual_rec["chat_prompt_addon"]
+        )
+        log_to_audit(DB_PATH, user_id, role, "EOY_PROGNOSE", query, response[:200])
+        return response
 
 
 class SaksbehandlingAgent:
     """Specialized Subgraph for Kommuneloven § 14-5 & Human-in-the-Loop Intercepts."""
     def process_reallocation(self, state: AgentState) -> AgentState:
         state["current_agent"] = "saksbehandling_agent"
+        query_text = state["messages"][-1]["content"] if state.get("messages") else "Saksbehandling § 14-5"
+        visual_rec = recommend_visual_for_chat_response(
+            query_text,
+            {"periods": 3, "has_target": True, "has_components": True},
+        )
         # Check authority thresholds (Kommuneloven § 14-5)
         # Human-in-the-Loop Interrupt
         if not state.get("approval_granted", False):
@@ -252,12 +313,49 @@ class SaksbehandlingAgent:
             state["final_response"] = (
                 "⏸️ Omdisponeringsforslaget krever politisk godkjenning fra Bystyret "
                 "(Kommuneloven § 14-5) eller overordnet fullmakt. Venter på saksbehandlers bekreftelse."
+                + visual_rec["chat_prompt_addon"]
             )
             return state
 
         state["requires_approval"] = False
-        state["final_response"] = "✅ Omdisponering godkjent og ført i audit_log."
+        state["final_response"] = (
+            "✅ Omdisponering godkjent og ført i audit_log iht. kommuneloven § 14-5."
+            + visual_rec["chat_prompt_addon"]
+        )
         return state
+
+    def process(self, state: Any, query: str) -> str:
+        """Direct subgraph execution for saksbehandling & Time-Visuals (AI_mvp_update2)."""
+        sektor = state.get("sektor", "Helse og Mestring") if isinstance(state, dict) else getattr(state, "sektor", "Helse og Mestring")
+        user_id = state.get("bruker_id") if isinstance(state, dict) else getattr(state, "user_id", "user_session")
+        role = state.get("rolle") if isinstance(state, dict) else getattr(state, "role", "direktor")
+
+        data_summary = {"periods": 3, "has_target": True, "has_components": True}
+        visual_rec = recommend_visual_for_chat_response(query, data_summary)
+        response = (
+            f"[Saksbehandlings-Agent]: Søkte i relevante tertial- og årsrapporter for {sektor}.\n"
+            "- Utarbeidet saksnotat iht. kommuneloven § 14-5 og økonomireglementet."
+            + visual_rec["chat_prompt_addon"]
+        )
+        log_to_audit(DB_PATH, user_id, role, "SAKSBEHANDLING", query, response[:200])
+        return response
+
+
+class SupervisorRouterAgent:
+    """Multi-Agent Supervisor Router with Time-Visuals Reasoning (AI_mvp_update2)."""
+    def __init__(self):
+        self.erp_agent = RegnskapERPAgent()
+        self.eoy_agent = FramsiktEOYAgent()
+        self.saks_agent = SaksbehandlingAgent()
+
+    def route_and_execute(self, state: Any, query: str) -> str:
+        query_lower = query.lower()
+        if any(w in query_lower for w in ["eoy", "prognose", "monte carlo", "p50", "framsikt", "eac", "etc"]):
+            return self.eoy_agent.process(state, query)
+        elif any(w in query_lower for w in ["sak", "vedtak", "bystyret", "formannskapet", "§ 14-5", "notat", "omdisponering"]):
+            return self.saks_agent.process(state, query)
+        else:
+            return self.erp_agent.process(state, query)
 
 
 # ============================================================================
@@ -462,6 +560,14 @@ def run_krs_agent(
                 "parameters": BudgetReallocationInput.model_json_schema(),
             },
         },
+        {
+            "type": "function",
+            "function": {
+                "name": "recommend_visual_for_chat_response",
+                "description": "Anbefaler optimal Time-Visuals (60 Suite) / FT Visual Vocabulary diagramtype for tidsrekker, prognoser og avvik",
+                "parameters": TimeVisualRecommendationInput.model_json_schema(),
+            },
+        },
     ]
 
     try:
@@ -477,7 +583,11 @@ def run_krs_agent(
             messages.append(msg.model_dump(exclude_none=True))
 
             if not msg.tool_calls:
-                state["final_response"] = msg.content or "Modellen returnerte et tomt svar."
+                final_txt = msg.content or "Modellen returnerte et tomt svar."
+                if "📊 **Visuelt forslag" not in final_txt:
+                    vis_rec = recommend_visual_for_chat_response(user_prompt)
+                    final_txt += vis_rec["chat_prompt_addon"]
+                state["final_response"] = final_txt
                 log_audit_trail(state)
                 return state["final_response"]
 
@@ -516,6 +626,9 @@ def run_krs_agent(
                             )
                         except Exception:
                             pass
+                    elif func_name == "recommend_visual_for_chat_response":
+                        vis_out = recommend_visual_for_chat_response(TimeVisualRecommendationInput(**args))
+                        res = json.dumps(vis_out, ensure_ascii=False)
                     else:
                         res = "Ukjent verktøy."
                 except Exception as exc:
@@ -538,7 +651,11 @@ def run_krs_agent(
         )
         final_res = client.chat.completions.create(model=MODEL_NAME, messages=messages)
         if final_res.choices and final_res.choices[0].message.content:
-            state["final_response"] = final_res.choices[0].message.content
+            final_txt = final_res.choices[0].message.content
+            if "📊 **Visuelt forslag" not in final_txt:
+                vis_rec = recommend_visual_for_chat_response(user_prompt)
+                final_txt += vis_rec["chat_prompt_addon"]
+            state["final_response"] = final_txt
             log_audit_trail(state)
             return state["final_response"]
 

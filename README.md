@@ -46,10 +46,16 @@ mvp-krs-kommune-ai/
 ├── app/                        # Applikasjonskode
 │   ├── __init__.py
 │   ├── schemas.py              # Pydantic v2 datakontrakter, RBAC og AuditLog
-│   ├── tools.py                # SQL, RAG, EOY, Drill-Down, Omdisponering og Audit
-│   ├── agent.py                # Agentorkestrering
-│   ├── build_rag_index.py      # Opprettelse av SQLite-database og RAG-indeks
-│   └── frontend.py             # Streamlit web-grensesnitt
+│   ├── tools.py                # SQL, RAG, EOY, Drill-Down, Omdisponering, Time-Visuals og Audit
+│   ├── visual_sandbox.py       # FT Visual Vocabulary (36 Suite), Time-Visuals (60 Suite) & Power BI DAX
+│   ├── agent.py                # Multi-Agent Supervisor & Looped AI Orkestrering med Visual Reasoning
+│   ├── build_rag_index.py      # Opprettelse av SQLite-database, Star Schema og RAG-indeks
+│   └── frontend.py             # Streamlit web-grensesnitt (7 faner)
+│
+├── docs/                       # Arkitektur- og Visual Sandbox-dokumentasjon
+│   ├── ANTIGRAVITY_INSTRUCTIONS.md
+│   ├── ARCHITECTURE.md
+│   └── VISUAL_SANDBOX.md
 │
 └── reports/                    # Eksempelrapporter
     ├── Maanedsrapport_Helse_og_Mestring.pdf
@@ -97,6 +103,7 @@ end
         RAGTool["📚 Grounded RAG Search\n• Vektorsøk i Økonomiplan, Tertialrapporter & Forskrifter"]
         EOYTool["🔮 FramsiktEOYAgent & Lønnsmotor\n• Prediktiv EAC/ETC-årsprognose\n• Lønnsrammer, AGA, Pensjon"]
         ReallocTool["⚖️ SaksbehandlingAgent (§ 14-5)\n• Fullmaktssjekk & HITL Godkjenning\n• Saksframlegg-generator"]
+        VisTool["📊 Visual Sandbox & Time-Visuals (60 Suite)\n• recommend_visual_for_chat_response\n• Fan Chart P10/P50/P90, 3M Snitt, Slope Graph\n• Power BI DAX-mål"]
     end
 
     subgraph Governance ["4. Sikkerhet, Audit & Datatilsyn"]

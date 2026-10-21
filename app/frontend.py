@@ -40,6 +40,14 @@ try:
         DB_PATH,
     )
     from app.schemas import UserContext, BudgetReallocationInput
+    from app.visual_sandbox import (
+        get_time_visual_recommendation,
+        create_time_series_fig,
+        get_dax_snippets,
+        generate_waterfall_chart,
+        generate_scatter_correlation,
+        generate_lollipop_ranking,
+    )
 except ImportError:
     from agent import (
         run_krs_agent,
@@ -64,6 +72,14 @@ except ImportError:
         DB_PATH,
     )
     from schemas import UserContext, BudgetReallocationInput
+    from visual_sandbox import (
+        get_time_visual_recommendation,
+        create_time_series_fig,
+        get_dax_snippets,
+        generate_waterfall_chart,
+        generate_scatter_correlation,
+        generate_lollipop_ranking,
+    )
 
 # Streamlit Page Config
 st.set_page_config(
@@ -349,6 +365,12 @@ with tab1:
             with st.spinner(f"Supervisor ruter til {routed}, sjekker RBAC-tilganger og henter data..."):
                 response = run_krs_agent(active_prompt, user_ctx, approval_granted=hitl_approval)
                 st.markdown(response)
+                vis_rec = get_time_visual_recommendation(active_prompt, {"periods": 12, "has_target": True})
+                with st.expander(f"📊 Vis interaktivt {vis_rec['chart_type']} (Time-Visuals #{vis_rec['time_visual_id']})", expanded=True):
+                    st.plotly_chart(
+                        create_time_series_fig(vis_rec["chart_type"], title=f"{vis_rec['chart_type']} — {vis_rec['category']}"),
+                        width="stretch",
+                    )
                 st.session_state.messages.append({"role": "assistant", "content": response})
 
 # ==============================================================================
@@ -801,6 +823,46 @@ with tab3:
     fig_wf.update_layout(margin=dict(l=20, r=40, t=58, b=36))
     fig_wf.update_yaxes(title_text="MNOK", range=[0, max(eac_end, prof["bac_annual"]) * 1.22])
     st.plotly_chart(fig_wf, width="stretch")
+
+    st.divider()
+    st.subheader("🕒 Time-Visuals Sandbox (60 Ways to Visualize Time) & CPI Rangering")
+    st.caption(
+        "Interaktive tidsserie- og rangeringsmoduler fra Time-Visuals.pdf og FT Visual Vocabulary (36 Suite), inkludert ferdige Power BI DAX-mål."
+    )
+
+    tv_col1, tv_col2 = st.columns([3, 2])
+    with tv_col1:
+        selected_tv_chart = st.selectbox(
+            "Velg Time-Visuals diagramtype (Time-Visuals.pdf 60 Suite):",
+            [
+                "Fan Chart (P10/P50/P90)",
+                "Running Total Area Chart",
+                "Continuous Line + Moving Average (3M)",
+                "Slope Graph",
+                "Stacked Area Chart (% of Total)",
+                "Continuous Line with Markers & Reference Line",
+            ],
+        )
+        fig_tv = create_time_series_fig(
+            selected_tv_chart,
+            title=f"{selected_tv_chart} — {selected_ft_unit}",
+        )
+        st.plotly_chart(fig_tv, width="stretch")
+
+    with tv_col2:
+        st.plotly_chart(generate_lollipop_ranking(), width="stretch")
+
+    with st.expander("💡 Ferdige Power BI DAX-Mål (Star Schema — Helse og Mestring)", expanded=False):
+        dax_snippets = get_dax_snippets()
+        dax_c1, dax_c2 = st.columns(2)
+        with dax_c1:
+            st.markdown("**1. Helårsprognose (EAC − BAC):**")
+            st.code(dax_snippets["HM_EOY_Avvik_Prognose"], language="dax")
+        with dax_c2:
+            st.markdown("**2. Cost Performance Index (CPI):**")
+            st.code(dax_snippets["HM_Cost_Performance_Index"], language="dax")
+        st.markdown("**3. 3-Måneders Glidende Snitt for Overtid & Vikarbyrå (Art 109000/110000):**")
+        st.code(dax_snippets["HM_Moving_Avg_3M_Vikar"], language="dax")
 
     ft_img_path = PROJECT_ROOT / "assets" / "ft-Viz-Guide.png"
     if ft_img_path.exists():

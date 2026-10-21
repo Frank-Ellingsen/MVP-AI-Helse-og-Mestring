@@ -15,6 +15,7 @@ if hasattr(sys.stdout, "reconfigure"):
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_DIR = os.path.join(BASE_DIR, "..", "data", "db")
 KNOWLEDGE_DIR = os.path.join(BASE_DIR, "..", "data", "knowledge_base")
+ASSETS_DIR = os.path.join(BASE_DIR, "..", "assets")
 
 os.makedirs(DB_DIR, exist_ok=True)
 os.makedirs(KNOWLEDGE_DIR, exist_ok=True)
@@ -27,13 +28,24 @@ def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # 1. RAG-tabell for ustrukturerte dokumentutdrag
+    # 1. RAG-tabeller for ustrukturerte dokumentutdrag og sektorfiltrerte dokumenter
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS knowledge_chunks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             source_file TEXT,
             page INTEGER,
             content TEXT
+        );
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS rag_documents (
+            doc_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            document_type TEXT NOT NULL,
+            sektor TEXT DEFAULT 'Helse og mestring',
+            ansvar_id TEXT DEFAULT '*',
+            content TEXT NOT NULL
         );
     """)
 
@@ -170,9 +182,10 @@ def init_db():
 
 
 def build_pdf_rag_index():
-    print(f"-> Indekserer PDF-dokumenter fra {KNOWLEDGE_DIR}...")
-    if not os.path.exists(KNOWLEDGE_DIR):
-        print("Ingen knowledge_base mappe funnet.")
+    print(f"-> Indekserer PDF-dokumenter fra {KNOWLEDGE_DIR} og {ASSETS_DIR}...")
+    search_dirs = [d for d in (KNOWLEDGE_DIR, ASSETS_DIR) if os.path.exists(d)]
+    if not search_dirs:
+        print("Ingen PDF-mapper funnet.")
         return
 
     conn = sqlite3.connect(DB_PATH)
@@ -181,25 +194,66 @@ def build_pdf_rag_index():
     cursor.execute("SELECT DISTINCT source_file FROM knowledge_chunks")
     already_indexed = {row[0] for row in cursor.fetchall()}
 
-    for root, _, files in os.walk(KNOWLEDGE_DIR):
-        for file in files:
-            if file.lower().endswith(".pdf"):
-                if file in already_indexed:
-                    print(f"  [OK] Allerede indeksert PDF: {file}")
-                    continue
-                pdf_path = os.path.join(root, file)
-                try:
-                    reader = PdfReader(pdf_path)
-                    for page_idx, page in enumerate(reader.pages):
-                        text = page.extract_text()
-                        if text and text.strip():
-                            cursor.execute(
-                                "INSERT INTO knowledge_chunks (source_file, page, content) VALUES (?, ?, ?)",
-                                (file, page_idx + 1, text.strip()),
-                            )
-                    print(f"  [OK] Indeksert PDF: {file} ({len(reader.pages)} sider)")
-                except Exception as e:
-                    print(f"  [FEIL] Feil under lesing av {file}: {str(e)}")
+    for target_dir in search_dirs:
+        for root, _, files in os.walk(target_dir):
+            for file in files:
+                if file.lower().endswith(".pdf"):
+                    if file in already_indexed:
+                        print(f"  [OK] Allerede indeksert PDF: {file}")
+                        continue
+                    pdf_path = os.path.join(root, file)
+                    try:
+                        reader = PdfReader(pdf_path)
+                        for page_idx, page in enumerate(reader.pages):
+                            text = page.extract_text()
+                            if text and text.strip():
+                                cursor.execute(
+                                    "INSERT INTO knowledge_chunks (source_file, page, content) VALUES (?, ?, ?)",
+                                    (file, page_idx + 1, text.strip()),
+                                )
+                        already_indexed.add(file)
+                        print(f"  [OK] Indeksert PDF: {file} ({len(reader.pages)} sider)")
+                    except Exception as e:
+                        print(f"  [FEIL] Feil under lesing av {file}: {str(e)}")
+
+    # Populer rag_documents med strukturerte styringsdokumenter for Helse og Mestring
+    cursor.execute("SELECT COUNT(*) FROM rag_documents")
+    if cursor.fetchone()[0] == 0:
+        rag_docs = [
+            (
+                "2. Tertialrapport 2026 — Helse og Mestring",
+                "Tertialrapport",
+                "Helse og mestring",
+                "*",
+                "Sektor Helse og Mestring rapporterer et forventet årsavvik (EOY P50) på -9,85 MNOK ved uendret drift, drevet av høyt sykefravær (9,5%–12,4%), overtidsbruk (art 109000) og vikarinnleie (art 110000). Preskriptive tiltak etter kommuneloven § 14-5 inkluderer TØRN-turnus (effekt 1,85 MNOK) og innhenting av NAV-refusjoner.",
+            ),
+            (
+                "Økonomireglement & Delegeringsfullmakter — Kristiansand Kommune",
+                "Reglement",
+                "Konsern",
+                "*",
+                "Delegeringsfullmakter jf. kommuneloven § 14-5: Enhetsleder har fullmakt inntil 1,8 MNOK innen eget ansvar. Kommunalsjef har fullmakt inntil 10,0 MNOK innen samme sektor. Kommunedirektør har fullmakt inntil 25,0 MNOK. Beløp over 25,0 MNOK eller rammeendringer mellom sektorer krever vedtak i Bystyret.",
+            ),
+            (
+                "Avviksanalyse M8 — Randesund Omsorgssenter (2530)",
+                "Enhetsrapport",
+                "Helse og mestring",
+                "2530",
+                "Ansvar 2530 Randesund Omsorgssenter har et akkumulert merforbruk YTD M8 på 1,75 MNOK (CPI 0,87), hovedsakelig knyttet til overtid art 109000 (+750 kkr), vikarbyrå art 110000 (+550 kkr) og etterslep på sykelønnsrefusjon fra NAV art 169000 (+300 kkr).",
+            ),
+            (
+                "Time-Visuals (60 Ways to Visualize Time) & FT Visual Vocabulary",
+                "Metodikk",
+                "Konsern",
+                "*",
+                "Visuell beslutningsstøtte følger Edward Tuftes Data-Ink Ratio og Alan Smiths Time-Visuals (60 Suite): Fan Chart (P10/P50/P90) for Monte Carlo EOY-prognose, Running Total Area for akkumulert YTD-forbruk, Slope Graph for endring T1 til T2, og 3M Moving Average for å glatte ut månedlig støy.",
+            ),
+        ]
+        cursor.executemany(
+            "INSERT INTO rag_documents (title, document_type, sektor, ansvar_id, content) VALUES (?, ?, ?, ?, ?)",
+            rag_docs,
+        )
+        print("  [OK] Populerte rag_documents med styringsdokumenter.")
 
     conn.commit()
     conn.close()
