@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "p02_trend_og_tidsserie",
+  "displayName": "03.Tidserie-innsikt",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920
+}

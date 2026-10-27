@@ -1,0 +1,37 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Transform file from faktatabeller'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Transform file from faktatabeller\Helper queries'
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["fact_data","Sample file","Parameter","Transform Sample file","Transform file","dim_date","dim_ansvar","dim_kostra_funksjon","dim_kostra_kontoplan","_Måltall","_Valg_Maltall","Kutt_Hoveddrivere_Pct","Omdisponering_Pct","dim_oppdatering"]
+
+ref table fact_data
+ref table dim_date
+ref table dim_ansvar
+ref table dim_kostra_funksjon
+ref table dim_kostra_kontoplan
+ref table _Måltall
+ref table _Valg_Maltall
+ref table Kutt_Hoveddrivere_Pct
+ref table Omdisponering_Pct
+ref table dim_oppdatering
+
+ref cultureInfo en-US
+

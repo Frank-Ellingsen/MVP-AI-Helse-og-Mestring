@@ -1,0 +1,112 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p_ft01_deviation_diverging",
+  "position": {
+    "x": 19.653543307086615,
+    "y": 379.46456692913381,
+    "z": 4000,
+    "height": 681.82677165354323,
+    "width": 925.22834645669286,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "barChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Enhet_Navn"
+                }
+              },
+              "queryRef": "dim_ansvar.Enhet_Navn",
+              "nativeQueryRef": "Enhet_Navn",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "FT_Dev_Diverging_Avvik_Kr"
+                }
+              },
+              "queryRef": "_Måltall.FT_Dev_Diverging_Avvik_Kr",
+              "nativeQueryRef": "FT_Dev_Diverging_Avvik_Kr",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Måltall"
+                        }
+                      },
+                      "Property": "Avvik Bar Farge"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Diverging Bar: Avvik per Enhet (Mindreforbruk vs Merforbruk)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

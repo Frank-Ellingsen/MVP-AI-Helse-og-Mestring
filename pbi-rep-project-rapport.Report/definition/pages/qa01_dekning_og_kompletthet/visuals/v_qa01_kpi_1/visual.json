@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v_qa01_kpi_1",
+  "position": {
+    "x": 31.8552036199095,
+    "y": 331.58371040723978,
+    "z": 2000,
+    "height": 164.92610837438423,
+    "width": 283.30049261083741,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "QA Antall Filer Importert"
+                }
+              },
+              "queryRef": "_Måltall.QA Antall Filer Importert",
+              "nativeQueryRef": "QA Antall Filer Importert",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Innleste Filer (CSV)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

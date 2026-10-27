@@ -1,0 +1,238 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v05_table_pareto_tiltak",
+  "position": {
+    "x": 19.411764705882355,
+    "y": 464.11764705882354,
+    "z": 2000,
+    "height": 596.47058823529414,
+    "width": 1584.7058823529412,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Kontonavn"
+                }
+              },
+              "queryRef": "dim_kostra_kontoplan.Kontonavn",
+              "nativeQueryRef": "Kontonavn",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Negativ Kostnadsdriver"
+                }
+              },
+              "queryRef": "_Måltall.ERP Negativ Kostnadsdriver",
+              "nativeQueryRef": "ERP Negativ Kostnadsdriver",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Negativ Driver Andel %"
+                }
+              },
+              "queryRef": "_Måltall.ERP Negativ Driver Andel %",
+              "nativeQueryRef": "ERP Negativ Driver Andel %",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Driver Tiltaksbehov Måned"
+                }
+              },
+              "queryRef": "_Måltall.ERP Driver Tiltaksbehov Måned",
+              "nativeQueryRef": "ERP Driver Tiltaksbehov Måned",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Driver Tiltaksbehov Restår"
+                }
+              },
+              "queryRef": "_Måltall.ERP Driver Tiltaksbehov Restår",
+              "nativeQueryRef": "ERP Driver Tiltaksbehov Restår",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Driver Tiltaksgrad %"
+                }
+              },
+              "queryRef": "_Måltall.ERP Driver Tiltaksgrad %",
+              "nativeQueryRef": "ERP Driver Tiltaksgrad %",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "ERP Negativ Kostnadsdriver"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnFormatting": [
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "_Måltall.ERP Negativ Kostnadsdriver"
+          }
+        },
+        {
+          "properties": {
+            "dataBars": {
+              "positiveColor": {
+                "solid": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'#efb5b9'"
+                      }
+                    }
+                  }
+                }
+              },
+              "negativeColor": {
+                "solid": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'#a0d1ff'"
+                      }
+                    }
+                  }
+                }
+              },
+              "axisColor": {
+                "solid": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'foreground'"
+                      }
+                    }
+                  }
+                }
+              },
+              "reverseDirection": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              },
+              "hideText": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              },
+              "totalMatchingOption": {
+                "expr": {
+                  "Literal": {
+                    "Value": "1L"
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.ERP Driver Tiltaksbehov Måned"
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Prioritert Tiltaksbehov for Kostnadsdrivere'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

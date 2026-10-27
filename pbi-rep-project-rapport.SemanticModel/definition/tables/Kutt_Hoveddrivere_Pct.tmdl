@@ -1,0 +1,38 @@
+table Kutt_Hoveddrivere_Pct
+	lineageTag: 71b02842-9a01-4be1-9bc0-81f7d38ae011
+
+	measure 'Kutt_Hoveddrivere_Pct Value' = SELECTEDVALUE('Kutt_Hoveddrivere_Pct'[Kutt_Hoveddrivere_Pct], 0.10)
+		formatString: 0.0%
+		lineageTag: 88c2b510-410a-4da7-9571-0ae12c9bf101
+
+	column Kutt_Hoveddrivere_Pct
+		dataType: double
+		formatString: 0.0%
+		lineageTag: b02194a2-8501-4478-8cf2-571cae019f22
+		summarizeBy: none
+		sourceColumn: Kutt_Hoveddrivere_Pct
+
+		annotation SummarizationSetBy = User
+
+	column Label
+		dataType: string
+		lineageTag: 48f95c10-ca12-4d81-817a-25c19be0f403
+		summarizeBy: none
+		sourceColumn: Label
+		sortByColumn: Kutt_Hoveddrivere_Pct
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Kutt_Hoveddrivere_Pct = m
+		mode: import
+		source =
+				let
+				    Values = List.Transform({0..30}, each Number.From(_) / 100),
+				    Source = Table.FromList(Values, Splitter.SplitByNothing(), {"Kutt_Hoveddrivere_Pct"}),
+				    ChangedType = Table.TransformColumnTypes(Source, {{"Kutt_Hoveddrivere_Pct", type number}}),
+				    AddLabel = Table.AddColumn(ChangedType, "Label", each Number.ToText([Kutt_Hoveddrivere_Pct] * 100, "0") & " %", type text)
+				in
+				    AddLabel
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,81 @@
+table dim_ansvar
+	lineageTag: 19d5aa69-b117-49a6-9848-a97056448b03
+
+	column Ansvar_Kode
+		dataType: string
+		lineageTag: 80a349f0-37bb-445a-b8b3-6b2584166238
+		summarizeBy: none
+		sourceColumn: Ansvar_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Enhet_Navn
+		dataType: string
+		lineageTag: 06eee1db-d0f0-4121-9e87-87b281ecb7a2
+		summarizeBy: none
+		sourceColumn: Enhet_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ansvar_Navn
+		dataType: string
+		lineageTag: 65566fd1-54da-4716-a549-3bbf8546ce04
+		summarizeBy: none
+		sourceColumn: Ansvar_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Omrade_Kode
+		dataType: string
+		lineageTag: a467a28b-78ce-4df3-b4cc-0e3848fe9fa6
+		summarizeBy: none
+		sourceColumn: Omrade_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Omrade_Navn
+		dataType: string
+		lineageTag: 8d779062-827a-4fff-a589-fd4ab5e2d14a
+		summarizeBy: none
+		sourceColumn: Omrade_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Omrade_Kode_Navn
+		dataType: string
+		lineageTag: 7f557b63-fa9f-4fad-ac44-1d58876b9f2e
+		summarizeBy: none
+		sourceColumn: Omrade_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ansvar_Kode_Navn
+		dataType: string
+		lineageTag: 888e5b55-af0c-48bf-b805-fdfb5642399e
+		summarizeBy: none
+		sourceColumn: Ansvar_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Er_Aktiv
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ce75aed7-da76-4642-b539-24f799bdf5c9
+		summarizeBy: none
+		sourceColumn: Er_Aktiv
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_ansvar = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\dimensjoner\dim_ansvar.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Ansvar_Kode", Int64.Type}, {"Enhet_Navn", type text}, {"Ansvar_Navn", type text}, {"Omrade_Kode", Int64.Type}, {"Omrade_Navn", type text}, {"Omrade_Kode_Navn", type text}, {"Ansvar_Kode_Navn", type text}, {"Er_Aktiv", type logical}}),
+				  #"Changed column type 1" = Table.TransformColumnTypes(#"Changed column type", {{"Ansvar_Kode", type text}, {"Omrade_Kode", type text}})
+				in
+				  #"Changed column type 1"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v05_kpi_top_belop",
+  "position": {
+    "x": 584.11764705882354,
+    "y": 227.64705882352942,
+    "z": 1000,
+    "height": 224.11764705882354,
+    "width": 467.64705882352945,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "ERP Største Kostnadsdriver Beløp"
+                }
+              },
+              "queryRef": "_Måltall.ERP Største Kostnadsdriver Beløp",
+              "nativeQueryRef": "ERP Største Kostnadsdriver Beløp",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1000D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Beløp Hoveddriver'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

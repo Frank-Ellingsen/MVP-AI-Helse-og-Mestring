@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "ef0189e75a0544d71306",
+  "position": {
+    "x": 21.182033096926716,
+    "y": 0,
+    "z": 8000,
+    "height": 219.38534278959813,
+    "width": 1867.0449172576834,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Dynamisk Rapportittel Komplett"
+                }
+              },
+              "queryRef": "_Måltall.Dynamisk Rapportittel Komplett",
+              "nativeQueryRef": "Dynamisk Rapportittel Komplett"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'DQA 01: Dekning & Kompletthetsmatrise (KOSTRA Data Coverage)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

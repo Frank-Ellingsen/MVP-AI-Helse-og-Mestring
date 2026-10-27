@@ -1,0 +1,49 @@
+table _Valg_Maltall
+	lineageTag: b4f15d2a-4f51-4122-bc51-e407185cc631
+
+	column Maltall_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 26db6b24-b3ef-4e17-bfef-c19b6732f941
+		summarizeBy: none
+		sourceColumn: Maltall_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Maltall_Navn
+		dataType: string
+		lineageTag: edc0e258-efc3-424a-95cf-dbb6df64ec28
+		summarizeBy: none
+		sourceColumn: Maltall_Navn
+		sortByColumn: Sortering
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sortering
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ca8a554a-a0bb-43ea-9fc6-0adbcbcce2e1
+		summarizeBy: none
+		sourceColumn: Sortering
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Valg_Maltall = m
+		mode: import
+		source =
+				let
+				    Source = #table(
+				        type table [Maltall_ID = Int64.Type, Maltall_Navn = text, Sortering = Int64.Type],
+				        {
+				            {1, "Regnskap", 1},
+				            {2, "Budsjett", 2},
+				            {3, "Avvik Kr", 3},
+				            {4, "Avvik YTD %", 4}
+				        }
+				    )
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

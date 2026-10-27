@@ -1,0 +1,151 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v03_scurve_tufte",
+  "position": {
+    "x": 14.117647058823529,
+    "y": 635.29411764705878,
+    "z": 1000,
+    "height": 425.29411764705884,
+    "width": 910.58823529411768,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "month"
+                }
+              },
+              "queryRef": "dim_date.month",
+              "nativeQueryRef": "month",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "FT_Time_Cumulative_Budget"
+                }
+              },
+              "queryRef": "_Måltall.FT_Time_Cumulative_Budget",
+              "nativeQueryRef": "FT_Time_Cumulative_Budget",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "FT_Time_Cumulative_Actual"
+                }
+              },
+              "queryRef": "_Måltall.FT_Time_Cumulative_Actual",
+              "nativeQueryRef": "FT_Time_Cumulative_Actual",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "FT_Time_Cumulative_EAC"
+                }
+              },
+              "queryRef": "_Måltall.FT_Time_Cumulative_EAC",
+              "nativeQueryRef": "FT_Time_Cumulative_EAC",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 9,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.FT_Time_Cumulative_Actual"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 3,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.FT_Time_Cumulative_Budget"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Time Visuals 10 & 23-24: Akkumulert S-Kurve med Tufte direkte merking'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

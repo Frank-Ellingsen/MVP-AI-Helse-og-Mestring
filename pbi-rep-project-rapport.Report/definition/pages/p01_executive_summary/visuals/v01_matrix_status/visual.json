@@ -1,0 +1,233 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v01_matrix_status",
+  "position": {
+    "x": 686.90307328605206,
+    "y": 577.96690307328606,
+    "z": 5000,
+    "height": 482.6477541371159,
+    "width": 1201.323877068558,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Omrade_Navn"
+                }
+              },
+              "queryRef": "dim_ansvar.Omrade_Navn",
+              "nativeQueryRef": "Omrade_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Enhet_Navn"
+                }
+              },
+              "queryRef": "dim_ansvar.Enhet_Navn",
+              "nativeQueryRef": "Enhet_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Budsjett"
+                }
+              },
+              "queryRef": "_Måltall.Sum Budsjett",
+              "nativeQueryRef": "Sum Budsjett",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Regnskap"
+                }
+              },
+              "queryRef": "_Måltall.Sum Regnskap",
+              "nativeQueryRef": "Sum Regnskap",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Avvik Kr"
+                }
+              },
+              "queryRef": "_Måltall.Avvik Kr",
+              "nativeQueryRef": "Avvik Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Avvik %"
+                }
+              },
+              "queryRef": "_Måltall.Avvik %",
+              "nativeQueryRef": "Avvik %",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "abs Avvik %"
+                }
+              },
+              "queryRef": "_Måltall.abs Avvik %",
+              "nativeQueryRef": "abs Avvik %",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "RAG Ikon Avvik"
+                }
+              },
+              "queryRef": "_Måltall.RAG Ikon Avvik",
+              "nativeQueryRef": "RAG Ikon Avvik",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "abs Avvik %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.33667303565193D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.Avvik %"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "99.11765201729713D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.Avvik Kr"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "162.11766585154578D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Måltall.Sum Budsjett"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tufte Statusmatrise med RAG-indikator'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

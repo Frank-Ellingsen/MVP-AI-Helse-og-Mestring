@@ -1,0 +1,22 @@
+table dim_oppdatering
+	lineageTag: 68f3c25e-026b-48ed-a8e7-ba68911b2507
+
+	column Sist_Oppdatert
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dacc2831-57ad-4f2d-b322-53d2ca2f92e1
+		summarizeBy: none
+		sourceColumn: Sist_Oppdatert
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_oppdatering = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [Sist_Oppdatert = datetime], {{DateTime.LocalNow()}})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "qa03_filkontroll",
+    "qa01_dekning_og_kompletthet",
+    "p01_executive_summary",
+    "p02_trend_og_tidsserie",
+    "p04_avvik_og_drivere",
+    "787cb8c3ce10a1326f82",
+    "p03_tufte_scurve_og_prognose",
+    "p_ft01_deviation",
+    "p05_pareto_og_korrelasjon",
+    "p06_scenario_simulering"
+  ],
+  "activePageName": "p06_scenario_simulering"
+}

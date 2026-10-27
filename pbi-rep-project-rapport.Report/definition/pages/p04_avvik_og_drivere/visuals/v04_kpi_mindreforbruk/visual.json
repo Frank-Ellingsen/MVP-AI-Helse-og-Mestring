@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v04_kpi_mindreforbruk",
+  "position": {
+    "x": 1601.447963800905,
+    "y": 44.886877828054295,
+    "z": 2000,
+    "height": 205.61085972850677,
+    "width": 298.2805429864253,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Mindreforbruk Kr"
+                }
+              },
+              "queryRef": "_Måltall.Mindreforbruk Kr",
+              "nativeQueryRef": "Mindreforbruk Kr",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1000D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Totalt Mindreforbruk'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

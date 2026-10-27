@@ -1,0 +1,167 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v06_matrix_simulation",
+  "position": {
+    "x": 19.051819184123485,
+    "y": 412.78941565600883,
+    "z": 7000,
+    "height": 647.76185226019845,
+    "width": 1862.8445424476295,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Enhet_Navn"
+                }
+              },
+              "queryRef": "dim_ansvar.Enhet_Navn",
+              "nativeQueryRef": "Enhet_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "EOY Estimert Avvik Kr"
+                }
+              },
+              "queryRef": "_Måltall.EOY Estimert Avvik Kr",
+              "nativeQueryRef": "EOY Estimert Avvik Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Simulert Kutt Hoveddrivere Kr"
+                }
+              },
+              "queryRef": "_Måltall.Simulert Kutt Hoveddrivere Kr",
+              "nativeQueryRef": "Simulert Kutt Hoveddrivere Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Simulert Frigjort Mindreforbruk Kr"
+                }
+              },
+              "queryRef": "_Måltall.Simulert Frigjort Mindreforbruk Kr",
+              "nativeQueryRef": "Simulert Frigjort Mindreforbruk Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Simulert Totale Tiltak Kr"
+                }
+              },
+              "queryRef": "_Måltall.Simulert Totale Tiltak Kr",
+              "nativeQueryRef": "Simulert Totale Tiltak Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Simulert EOY Avvik Etter Tiltak Kr"
+                }
+              },
+              "queryRef": "_Måltall.Simulert EOY Avvik Etter Tiltak Kr",
+              "nativeQueryRef": "Simulert EOY Avvik Etter Tiltak Kr",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "Simulert Totale Tiltak Kr"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Enhetsvis Simuleringsmatrise før og etter Tiltak'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "7c5977785ac5a5a60ed6",
+  "position": {
+    "x": 754.98817966903073,
+    "y": 332.86052009456267,
+    "z": 6000,
+    "height": 727.75413711583928,
+    "width": 1165.0118203309694,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "month"
+                }
+              },
+              "queryRef": "dim_date.month",
+              "nativeQueryRef": "month",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Konto_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_kontoplan.Konto_Kode_Navn",
+              "nativeQueryRef": "Konto_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_funksjon"
+                    }
+                  },
+                  "Property": "Funksjonsgruppe_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_funksjon.Funksjonsgruppe_Kode_Navn",
+              "nativeQueryRef": "Funksjonsgruppe_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Budsjett"
+                }
+              },
+              "queryRef": "_Måltall.Sum Budsjett",
+              "nativeQueryRef": "Sum Budsjett",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Regnskap"
+                }
+              },
+              "queryRef": "_Måltall.Sum Regnskap",
+              "nativeQueryRef": "Sum Regnskap",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Avvik Kr"
+                }
+              },
+              "queryRef": "_Måltall.Avvik Kr",
+              "nativeQueryRef": "Avvik Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Regnskap MoM Endring Kr"
+                }
+              },
+              "queryRef": "_Måltall.Regnskap MoM Endring Kr",
+              "nativeQueryRef": "Regnskap MoM Endring Kr",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "QA Ekstreme MoM Endringer"
+                }
+              },
+              "queryRef": "_Måltall.QA Ekstreme MoM Endringer",
+              "nativeQueryRef": "QA Ekstreme MoM Endringer",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "Avvik Kr"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Anomalisjekk: Avvik, Ubudsjetterte Kostnader og MoM Volatilitet'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

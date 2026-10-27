@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v06_kpi_kutt_kr",
+  "position": {
+    "x": 958.941565600882,
+    "y": 65.622932745314216,
+    "z": 2000,
+    "height": 142.94117647058823,
+    "width": 300,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Simulert Kutt Hoveddrivere Kr"
+                }
+              },
+              "queryRef": "_Måltall.Simulert Kutt Hoveddrivere Kr",
+              "nativeQueryRef": "Simulert Kutt Hoveddrivere Kr",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1000D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tiltak: Kutt Drivere'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

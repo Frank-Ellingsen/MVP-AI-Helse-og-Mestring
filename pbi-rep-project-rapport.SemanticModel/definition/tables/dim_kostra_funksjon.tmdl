@@ -1,0 +1,120 @@
+table dim_kostra_funksjon
+	lineageTag: 91ef2619-4c2b-49cb-b1e0-8d9e0be8ac4c
+
+	column KOSTRA_Funksjon_ID
+		dataType: string
+		lineageTag: 034f748c-2f90-4d10-9d07-fc86d3b67f6c
+		summarizeBy: none
+		sourceColumn: KOSTRA_Funksjon_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Funksjon_Navn
+		dataType: string
+		lineageTag: 266ffaaf-7b1f-4c02-b107-de41760c9148
+		summarizeBy: none
+		sourceColumn: KOSTRA_Funksjon_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Funksjon_Kode_Navn
+		dataType: string
+		lineageTag: 176d152c-25a8-451d-aa00-4c5770308b9d
+		summarizeBy: none
+		sourceColumn: Funksjon_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Funksjonsgruppe_Kode
+		dataType: string
+		lineageTag: 9c45e4ae-c3b5-4b5d-a007-d57cceb71138
+		summarizeBy: none
+		sourceColumn: KOSTRA_Funksjonsgruppe_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Funksjonsgruppe_Navn
+		dataType: string
+		lineageTag: a4f043d7-2134-4ea4-ac31-79ff7167d82a
+		summarizeBy: none
+		sourceColumn: KOSTRA_Funksjonsgruppe_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Funksjonsgruppe_Kode_Navn
+		dataType: string
+		lineageTag: fc0c4c5d-14dc-46f9-972c-de2c37b58289
+		summarizeBy: none
+		sourceColumn: Funksjonsgruppe_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tjenesteomrade_Kode
+		dataType: string
+		lineageTag: 66ab989d-6df8-472c-8149-17fde6b36259
+		summarizeBy: none
+		sourceColumn: Tjenesteomrade_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tjenesteomrade_Navn
+		dataType: string
+		lineageTag: f795f74c-f4ed-4c5c-8e4d-37bda8c34290
+		summarizeBy: none
+		sourceColumn: Tjenesteomrade_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tjenesteomrade_Kode_Navn
+		dataType: string
+		lineageTag: 7126e575-a380-472d-a384-3cdb1fda60f0
+		summarizeBy: none
+		sourceColumn: Tjenesteomrade_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedfunksjon_Kode
+		dataType: string
+		lineageTag: 048056aa-3177-4e4a-a2ab-e7d281155fcb
+		summarizeBy: none
+		sourceColumn: Hovedfunksjon_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedfunksjon_Navn
+		dataType: string
+		lineageTag: 03bde2ae-2a5c-4221-af3c-9af3a07919ad
+		summarizeBy: none
+		sourceColumn: Hovedfunksjon_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedfunksjon_Kode_Navn
+		dataType: string
+		lineageTag: a2e0e7be-9470-4337-8ba6-85f4bb463178
+		summarizeBy: none
+		sourceColumn: Hovedfunksjon_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regnskapsregel_Beskrivelse
+		dataType: string
+		lineageTag: cf10495f-c053-44b6-b075-5fac25b92067
+		summarizeBy: none
+		sourceColumn: Regnskapsregel_Beskrivelse
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_kostra_funksjon = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\dimensjoner\dim_kostra_funksjon.csv"), [Delimiter = ",", Columns = 13, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"KOSTRA_Funksjon_ID", Int64.Type}, {"KOSTRA_Funksjon_Navn", type text}, {"Funksjon_Kode_Navn", type text}, {"KOSTRA_Funksjonsgruppe_Kode", Int64.Type}, {"KOSTRA_Funksjonsgruppe_Navn", type text}, {"Funksjonsgruppe_Kode_Navn", type text}, {"Tjenesteomrade_Kode", Int64.Type}, {"Tjenesteomrade_Navn", type text}, {"Tjenesteomrade_Kode_Navn", type text}, {"Hovedfunksjon_Kode", type text}, {"Hovedfunksjon_Navn", type text}, {"Hovedfunksjon_Kode_Navn", type text}, {"Regnskapsregel_Beskrivelse", type text}}),
+				  #"Changed column type 1" = Table.TransformColumnTypes(#"Changed column type", {{"KOSTRA_Funksjon_ID", type text}, {"KOSTRA_Funksjonsgruppe_Kode", type text}, {"Tjenesteomrade_Kode", type text}})
+				in
+				  #"Changed column type 1"
+
+	annotation PBI_ResultType = Table
+

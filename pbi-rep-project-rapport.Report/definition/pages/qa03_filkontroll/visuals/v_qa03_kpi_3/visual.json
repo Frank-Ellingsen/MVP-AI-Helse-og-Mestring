@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v_qa03_kpi_3",
+  "position": {
+    "x": 361.60756501182033,
+    "y": 0,
+    "z": 3000,
+    "height": 154.3262411347518,
+    "width": 364.63356973995275,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "QA Duplikatsjekk Filnavn"
+                }
+              },
+              "queryRef": "_Måltall.QA Duplikatsjekk Filnavn",
+              "nativeQueryRef": "QA Duplikatsjekk Filnavn",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Filduplikat Status'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

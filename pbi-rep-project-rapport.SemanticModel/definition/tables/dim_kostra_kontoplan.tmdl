@@ -1,0 +1,162 @@
+table dim_kostra_kontoplan
+	lineageTag: 336d9439-a165-4f71-9ae4-72cb81a39288
+
+	column Kontokode_6Siffer
+		dataType: string
+		lineageTag: 5df546a2-a8e1-40c6-9236-0a102f3620fa
+		summarizeBy: none
+		sourceColumn: Kontokode_6Siffer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kontonavn
+		dataType: string
+		lineageTag: 6019fd2c-4617-466d-8809-f59361493260
+		summarizeBy: none
+		sourceColumn: Kontonavn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Konto_Kode_Navn
+		dataType: string
+		lineageTag: d92796b6-ea72-4868-a44d-1aba76d9b365
+		summarizeBy: none
+		sourceColumn: Konto_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Art_4Siffer
+		dataType: string
+		lineageTag: 9176c41f-0459-45c0-8ec2-8734a2371e29
+		summarizeBy: none
+		sourceColumn: KOSTRA_Art_4Siffer
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Art_Navn
+		dataType: string
+		lineageTag: c05e1c61-e480-440b-8461-8892e8a94779
+		summarizeBy: none
+		sourceColumn: KOSTRA_Art_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Art_4Siffer_Navn
+		dataType: string
+		lineageTag: ca22e8cb-1c82-41b9-8864-2c633c5a0c56
+		summarizeBy: none
+		sourceColumn: KOSTRA_Art_4Siffer_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column KOSTRA_Art_3Siffer
+		dataType: string
+		lineageTag: 85781ab5-c2e9-4219-9aed-68db0d1192b8
+		summarizeBy: none
+		sourceColumn: KOSTRA_Art_3Siffer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedgruppe_Kode
+		dataType: string
+		lineageTag: 667cf09c-1201-4715-8a35-f60829eade4c
+		summarizeBy: none
+		sourceColumn: Hovedgruppe_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedgruppe_Navn
+		dataType: string
+		lineageTag: bed4b49f-7964-4b8c-b93b-29c6e131fad5
+		summarizeBy: none
+		sourceColumn: Hovedgruppe_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedgruppe_Kode_Navn
+		dataType: string
+		lineageTag: 4faf8938-83e8-4517-b043-98c563fb3587
+		summarizeBy: none
+		sourceColumn: Hovedgruppe_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedkategori_Kode
+		dataType: string
+		lineageTag: c07302c6-1985-4752-8895-905d10734cdb
+		summarizeBy: none
+		sourceColumn: Hovedkategori_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedkategori_Navn
+		dataType: string
+		lineageTag: cb88ef18-ae56-4ecd-b031-ee863d05dc58
+		summarizeBy: none
+		sourceColumn: Hovedkategori_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hovedkategori_Kode_Navn
+		dataType: string
+		lineageTag: 9480a8eb-c80e-4061-89ce-57d6bf3a82b4
+		summarizeBy: none
+		sourceColumn: Hovedkategori_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kontoklasse_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: a959b952-7060-4106-b700-07453c0324f4
+		summarizeBy: none
+		sourceColumn: Kontoklasse_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kontoklasse_Navn
+		dataType: string
+		lineageTag: 3310830d-5a04-4929-a425-0da8118d6e1d
+		summarizeBy: none
+		sourceColumn: Kontoklasse_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kontoklasse_Kode_Navn
+		dataType: string
+		lineageTag: 25ab0f4c-3647-4b50-8970-bb49db3e4a4c
+		summarizeBy: none
+		sourceColumn: Kontoklasse_Kode_Navn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regnskapsregel_Beskrivelse
+		dataType: string
+		lineageTag: 9de4c131-61a3-40b8-a3d8-7f2f9789b43a
+		summarizeBy: none
+		sourceColumn: Regnskapsregel_Beskrivelse
+
+		annotation SummarizationSetBy = Automatic
+
+	column Er_Aktiv
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0befade6-8077-4f6c-804d-10ecf674701c
+		summarizeBy: none
+		sourceColumn: Er_Aktiv
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_kostra_kontoplan = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\dimensjoner\dim_kostra_kontoplan.csv"), [Delimiter = ",", Columns = 18, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Kontokode_6Siffer", Int64.Type}, {"Kontonavn", type text}, {"Konto_Kode_Navn", type text}, {"KOSTRA_Art_4Siffer", Int64.Type}, {"KOSTRA_Art_Navn", type text}, {"KOSTRA_Art_4Siffer_Navn", type text}, {"KOSTRA_Art_3Siffer", Int64.Type}, {"Hovedgruppe_Kode", Int64.Type}, {"Hovedgruppe_Navn", type text}, {"Hovedgruppe_Kode_Navn", type text}, {"Hovedkategori_Kode", Int64.Type}, {"Hovedkategori_Navn", type text}, {"Hovedkategori_Kode_Navn", type text}, {"Kontoklasse_ID", Int64.Type}, {"Kontoklasse_Navn", type text}, {"Kontoklasse_Kode_Navn", type text}, {"Regnskapsregel_Beskrivelse", type text}, {"Er_Aktiv", type logical}}),
+				  #"Changed column type 1" = Table.TransformColumnTypes(#"Changed column type", {{"Kontokode_6Siffer", type text}, {"KOSTRA_Art_4Siffer", type text}, {"KOSTRA_Art_3Siffer", type text}, {"Hovedgruppe_Kode", type text}, {"Hovedkategori_Kode", type text}})
+				in
+				  #"Changed column type 1"
+
+	annotation PBI_ResultType = Table
+

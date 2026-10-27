@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v03_banner_title",
+  "position": {
+    "x": 14.117647058823529,
+    "y": 271.76470588235293,
+    "z": 0,
+    "height": 347.64705882352945,
+    "width": 1886.4705882352941,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Story Forecast Narrative"
+                }
+              },
+              "queryRef": "_Måltall.Story Forecast Narrative",
+              "nativeQueryRef": "Story Forecast Narrative",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Prognosenarrativ'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v_qa03_kpi_4",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 4000,
+    "height": 154.3262411347518,
+    "width": 373.7115839243499,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "QA Sist Oppdatert"
+                }
+              },
+              "queryRef": "_Måltall.QA Sist Oppdatert",
+              "nativeQueryRef": "QA Sist Oppdatert",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sist Oppdatert'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

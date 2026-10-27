@@ -1,0 +1,38 @@
+table Omdisponering_Pct
+	lineageTag: d4882109-1a02-45e8-b801-447cae819b33
+
+	measure 'Omdisponering_Pct Value' = SELECTEDVALUE('Omdisponering_Pct'[Omdisponering_Pct], 0.50)
+		formatString: 0.0%
+		lineageTag: a7731902-8bb1-419a-9e12-321ab908fc12
+
+	column Omdisponering_Pct
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 247190ca-c801-49b2-91e8-78c01b2a9f44
+		summarizeBy: none
+		sourceColumn: Omdisponering_Pct
+
+		annotation SummarizationSetBy = User
+
+	column Label
+		dataType: string
+		lineageTag: f2109bc4-da19-45a1-bf08-98e104ca2155
+		summarizeBy: none
+		sourceColumn: Label
+		sortByColumn: Omdisponering_Pct
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Omdisponering_Pct = m
+		mode: import
+		source =
+				let
+				    Values = List.Transform({0..20}, each Number.From(_) * 0.05),
+				    Source = Table.FromList(Values, Splitter.SplitByNothing(), {"Omdisponering_Pct"}),
+				    ChangedType = Table.TransformColumnTypes(Source, {{"Omdisponering_Pct", type number}}),
+				    AddLabel = Table.AddColumn(ChangedType, "Label", each Number.ToText([Omdisponering_Pct] * 100, "0") & " %", type text)
+				in
+				    AddLabel
+
+	annotation PBI_ResultType = Table
+

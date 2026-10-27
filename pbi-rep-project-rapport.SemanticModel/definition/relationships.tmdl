@@ -1,0 +1,16 @@
+relationship AutoDetected_13ef3fce-9d03-4999-9c50-1a3e9a9962c3
+	fromColumn: fact_data.KOSTRA_Funksjonsgruppe_Kode
+	toColumn: dim_kostra_funksjon.KOSTRA_Funksjonsgruppe_Kode
+
+relationship AutoDetected_124ea88b-77b4-4889-b064-99ab7728656c
+	fromColumn: fact_data.Kontokode_6Siffer
+	toColumn: dim_kostra_kontoplan.Kontokode_6Siffer
+
+relationship AutoDetected_2e52c6a1-a1b5-4a18-8b9b-072c154cb486
+	fromColumn: fact_data.Ansvar_Kode
+	toColumn: dim_ansvar.Ansvar_Kode
+
+relationship 9694bdf1-1f90-11f7-b475-3659190bf2d0
+	fromColumn: fact_data.Dato
+	toColumn: dim_date.Dato
+

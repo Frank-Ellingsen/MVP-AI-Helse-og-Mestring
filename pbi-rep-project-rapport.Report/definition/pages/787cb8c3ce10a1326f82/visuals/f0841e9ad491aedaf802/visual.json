@@ -1,0 +1,540 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "f0841e9ad491aedaf802",
+  "position": {
+    "x": 10.588235294117647,
+    "y": 232.94117647058823,
+    "z": 0,
+    "height": 847.05882352941182,
+    "width": 1909.4117647058824,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "decompositionTreeVisual",
+    "query": {
+      "queryState": {
+        "Analyze": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "abs Avvik"
+                }
+              },
+              "queryRef": "_Måltall.abs Avvik",
+              "nativeQueryRef": "abs Avvik"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Kontoklasse_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_kontoplan.Kontoklasse_Kode_Navn",
+              "nativeQueryRef": "Kontoklasse_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Hovedkategori_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_kontoplan.Hovedkategori_Kode_Navn",
+              "nativeQueryRef": "Hovedkategori_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Ansvar_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_ansvar.Ansvar_Kode_Navn",
+              "nativeQueryRef": "Ansvar_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "KOSTRA_Art_4Siffer_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_kontoplan.KOSTRA_Art_4Siffer_Navn",
+              "nativeQueryRef": "KOSTRA_Art_4Siffer_Navn",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "abs Avvik"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "ExplainBy"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "dim_kostra_kontoplan.Kontoklasse_Kode_Navn"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Kontoklasse_Kode_Navn"
+                }
+              }
+            ],
+            "isPinned": true,
+            "AIInformation": {
+              "method": "MaxSplit"
+            }
+          },
+          {
+            "queryRefs": [
+              "dim_kostra_kontoplan.Hovedkategori_Kode_Navn"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_kontoplan"
+                    }
+                  },
+                  "Property": "Hovedkategori_Kode_Navn"
+                }
+              }
+            ],
+            "isPinned": true,
+            "AIInformation": {
+              "method": "MaxSplit"
+            }
+          },
+          {
+            "queryRefs": [
+              "dim_ansvar.Ansvar_Kode_Navn"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_ansvar"
+                    }
+                  },
+                  "Property": "Ansvar_Kode_Navn"
+                }
+              }
+            ],
+            "isPinned": true,
+            "AIInformation": {
+              "method": "MaxSplit"
+            }
+          },
+          {
+            "queryRefs": [
+              "dim_kostra_kontoplan.KOSTRA_Art_4Siffer_Navn"
+            ],
+            "isCollapsed": true,
+            "isPinned": true,
+            "AIInformation": {
+              "method": "MaxSplit"
+            }
+          }
+        ],
+        "root": {
+          "children": [
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'1 - Drift'"
+                  }
+                }
+              ],
+              "isToggled": true,
+              "children": [
+                {
+                  "identityValues": [
+                    {
+                      "Literal": {
+                        "Value": "'1 - Lønn og sosiale utgifter'"
+                      }
+                    }
+                  ],
+                  "isToggled": true,
+                  "children": [
+                    {
+                      "identityValues": [
+                        {
+                          "Literal": {
+                            "Value": "'25710 - Hjemmetjenesten Sone Nord'"
+                          }
+                        }
+                      ],
+                      "isToggled": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "objects": {
+      "tree": [
+        {
+          "properties": {
+            "effectiveBarsPerLevel": {
+              "expr": {
+                "Literal": {
+                  "Value": "11L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "insights": [
+        {
+          "properties": {
+            "isAINode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Kontoklasse_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Drift'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "isAINode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Kontoklasse_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Drift'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Hovedkategori_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Lønn og sosiale utgifter'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "isAINode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Kontoklasse_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Drift'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Hovedkategori_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Lønn og sosiale utgifter'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_ansvar"
+                          }
+                        },
+                        "Property": "Ansvar_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'25710 - Hjemmetjenesten Sone Nord'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "isAINode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Kontoklasse_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Drift'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "Hovedkategori_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 - Lønn og sosiale utgifter'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_ansvar"
+                          }
+                        },
+                        "Property": "Ansvar_Kode_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'25710 - Hjemmetjenesten Sone Nord'"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_kostra_kontoplan"
+                          }
+                        },
+                        "Property": "KOSTRA_Art_4Siffer_Navn"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1020 - Lønn til vikarer'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

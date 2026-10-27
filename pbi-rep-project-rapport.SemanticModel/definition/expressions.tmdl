@@ -1,0 +1,47 @@
+expression Parameter =
+		let
+		  Parameter = #"Sample file" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type binary, BinaryIdentifier = #"Sample file"]
+		in
+		  Parameter
+	lineageTag: 540448e6-4b2f-4c88-bf42-637543634e38
+	queryGroup: 'Transform file from faktatabeller\Helper queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Sample file' =
+		let
+		  Source = Folder.Files("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\faktatabeller"),
+		  #"Filtered hidden files" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+		  Navigation = #"Filtered hidden files"{0}[Content]
+		in
+		  Navigation
+	lineageTag: ba69b4f3-dfbf-4be2-a46a-1b0d9b8b265a
+	queryGroup: 'Transform file from faktatabeller\Helper queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample file' =
+		let
+		  Source = Csv.Document(Parameter, [Delimiter = ",", Columns = 7, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+		  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true])
+		in
+		  #"Promoted headers"
+	lineageTag: bd6dd102-a2ff-4faa-a9d0-6294bc226078
+	queryGroup: 'Transform file from faktatabeller'
+
+	annotation PBI_ResultType = Table
+
+expression 'Transform file' =
+		let
+		    Source = (Parameter as binary) => let
+		  Source = Csv.Document(Parameter, [Delimiter = ",", Columns = 7, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+		  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true])
+		in
+		  #"Promoted headers"
+		in
+		    Source
+	lineageTag: ceafb9e9-8bda-4807-a939-665106c175ab
+	queryGroup: 'Transform file from faktatabeller\Helper queries'
+
+	annotation PBI_ResultType = Function
+

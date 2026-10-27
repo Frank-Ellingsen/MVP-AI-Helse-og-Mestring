@@ -1,0 +1,95 @@
+table fact_data
+	lineageTag: bd6bca0c-2d9d-4296-b46c-c98189e3a8ed
+
+	column 'Source.Name'
+		dataType: string
+		lineageTag: 1961e62b-81a6-42f0-b1a5-0f80bd427d5f
+		summarizeBy: none
+		sourceColumn: Source.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dato
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3b826081-3931-42e7-8a01-c99461ed5c5b
+		summarizeBy: none
+		sourceColumn: Dato
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column KOSTRA_Funksjonsgruppe_Kode
+		dataType: string
+		lineageTag: 9234cbfe-64d4-4c55-af26-e0ea463a363e
+		summarizeBy: none
+		sourceColumn: KOSTRA_Funksjonsgruppe_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kontokode_6Siffer
+		dataType: string
+		lineageTag: 7eb22b97-3ed1-4b35-b2d1-1758a9d6bff4
+		summarizeBy: none
+		sourceColumn: Kontokode_6Siffer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ansvar_Kode
+		dataType: string
+		lineageTag: cae12c38-c695-4e8d-986b-0f83e14c4c97
+		summarizeBy: none
+		sourceColumn: Ansvar_Kode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sektor
+		dataType: string
+		lineageTag: 9e506d44-7c6e-4abf-8b17-af610953072e
+		summarizeBy: none
+		sourceColumn: Sektor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Budsjett
+		dataType: int64
+		formatString: 0
+		lineageTag: 84aa1769-211c-47e2-99f1-dbdf7188b974
+		summarizeBy: sum
+		sourceColumn: Budsjett
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regnskap
+		dataType: int64
+		formatString: 0
+		lineageTag: 95923aab-1926-41ff-a7df-9dfb14e02649
+		summarizeBy: sum
+		sourceColumn: Regnskap
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_data = m
+		mode: import
+		source =
+				let
+				  Source = Folder.Files("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\faktatabeller"),
+				  #"Filtered hidden files" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+				  #"Added custom" = let
+				    rootPath = Text.TrimEnd(Value.Metadata(Value.Type(#"Filtered hidden files"))[FileSystemTable.RootPath]?, "\"),
+				    combinePaths = (path1, path2) => Text.Combine({Text.TrimEnd(path1, "\"), path2}, "\"),
+				    getRelativePath = (path, relativeTo) => Text.Middle(path, Text.Length(relativeTo) + 1)
+				in
+				    Table.AddColumn(#"Filtered hidden files", "Relative Path", each getRelativePath(combinePaths([Folder Path], [Name]), rootPath), type text),
+				  #"Invoke custom function" = Table.AddColumn(#"Added custom", "Transform file", each #"Transform file"([Content])),
+				  #"Renamed columns" = Table.RenameColumns(#"Invoke custom function", {{"Relative Path", "Source.Name"}}),
+				  #"Removed other columns" = Table.SelectColumns(#"Renamed columns", {"Source.Name", "Transform file"}),
+				  #"Expanded table column" = Table.ExpandTableColumn(#"Removed other columns", "Transform file", Table.ColumnNames(#"Transform file"(#"Sample file"))),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Expanded table column", {{"Dato", type date}, {"KOSTRA_Funksjonsgruppe_Kode", Int64.Type}, {"Kontokode_6Siffer", Int64.Type}, {"Ansvar_Kode", Int64.Type}, {"Sektor", type text}, {"Budsjett", type number}, {"Regnskap", type number}}),
+				  #"Changed column type 1" = Table.TransformColumnTypes(#"Changed column type", {{"KOSTRA_Funksjonsgruppe_Kode", type text}, {"Kontokode_6Siffer", type text}, {"Ansvar_Kode", type text}, {"Budsjett", Int64.Type}, {"Regnskap", Int64.Type}})
+				in
+				  #"Changed column type 1"
+
+	annotation PBI_ResultType = Table
+

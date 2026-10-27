@@ -1,0 +1,167 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v_qa01_table_coverage",
+  "position": {
+    "x": 13.031674208144796,
+    "y": 524.16289592760177,
+    "z": 6000,
+    "height": 521.26696832579182,
+    "width": 1253.9366515837103,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_funksjon"
+                    }
+                  },
+                  "Property": "Tjenesteomrade_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_funksjon.Tjenesteomrade_Navn",
+              "nativeQueryRef": "Tjenesteomrade_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_kostra_funksjon"
+                    }
+                  },
+                  "Property": "Funksjonsgruppe_Kode_Navn"
+                }
+              },
+              "queryRef": "dim_kostra_funksjon.Funksjonsgruppe_Kode_Navn",
+              "nativeQueryRef": "Funksjonsgruppe_Kode_Navn",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_data"
+                    }
+                  },
+                  "Property": "Sektor"
+                }
+              },
+              "queryRef": "fact_data.Sektor",
+              "nativeQueryRef": "Sektor",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "yyyy-mm"
+                }
+              },
+              "queryRef": "dim_date.yyyy-mm",
+              "nativeQueryRef": "yyyy-mm",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "QA Dekningsstatus Indikator"
+                }
+              },
+              "queryRef": "_Måltall.QA Dekningsstatus Indikator",
+              "nativeQueryRef": "QA Dekningsstatus Indikator",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Regnskap"
+                }
+              },
+              "queryRef": "_Måltall.Sum Regnskap",
+              "nativeQueryRef": "Sum Regnskap",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Måltall"
+                    }
+                  },
+                  "Property": "Sum Budsjett"
+                }
+              },
+              "queryRef": "_Måltall.Sum Budsjett",
+              "nativeQueryRef": "Sum Budsjett",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Måltall"
+                  }
+                },
+                "Property": "QA Dekningsstatus Indikator"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dekningsstatus per Funksjonsgruppe, Sektor og Periode'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

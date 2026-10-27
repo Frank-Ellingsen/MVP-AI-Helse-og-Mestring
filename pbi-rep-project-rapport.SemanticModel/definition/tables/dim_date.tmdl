@@ -1,0 +1,128 @@
+table dim_date
+	lineageTag: 8aa2260c-b402-4dcd-b9a4-7b478aa49462
+	dataCategory: Time
+
+	column Dato
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: 473827f5-55b1-4b55-a83b-04d7c066c897
+		summarizeBy: none
+		sourceColumn: Dato
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ar
+		dataType: int64
+		formatString: 0
+		lineageTag: e5308231-c6ea-4c11-bc23-a9144e718aba
+		summarizeBy: sum
+		sourceColumn: Ar
+
+		annotation SummarizationSetBy = Automatic
+
+	column Maned_Nummer
+		dataType: int64
+		formatString: 0
+		lineageTag: 83e8e8e8-0f6c-4fd2-84e4-d93f3a188ba3
+		summarizeBy: sum
+		sourceColumn: Maned_Nummer
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: string
+		lineageTag: 55542826-7fee-479f-8ec2-73ec5ad61916
+		summarizeBy: none
+		sourceColumn: month
+		sortByColumn: Maned_Nummer
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Uke
+		dataType: int64
+		formatString: 0
+		lineageTag: a8b3b6ae-4133-4c29-919d-a5ed59ca8c20
+		summarizeBy: sum
+		sourceColumn: Uke
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start of month'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d9b42d75-7b53-4c9a-87b3-5ab52d81bf39
+		summarizeBy: none
+		sourceColumn: Start of month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Start of year'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 6d456f51-d4b6-45d3-abe6-23dac60aa9da
+		summarizeBy: none
+		sourceColumn: Start of year
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Maned_Navn = dim_date[month]
+		dataType: string
+		lineageTag: 88719bc4-3b10-4366-a791-38374971c244
+		summarizeBy: none
+		sortByColumn: Maned_Nummer
+
+		annotation SummarizationSetBy = Automatic
+
+	column yyyy-mm
+		dataType: string
+		lineageTag: 170b735b-a29b-42fb-9d65-c05626580cc5
+		summarizeBy: none
+		sourceColumn: yyyy-mm
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\frank\Desktop\Kom\powerbi_kostra_datamodell\dimensjoner\dim_date.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Dato", type date}, {"Ar", Int64.Type}, {"Maned_Nummer", Int64.Type}, {"Maned_Navn", type text}, {"Ar_Maned", type date}, {"Kvartal", type text}, {"Uke", Int64.Type}, {"Dag_i_Uke", type text}}),
+				  #"Inserted start of month" = Table.AddColumn(#"Changed column type", "Start of month", each Date.StartOfMonth([Dato]), type nullable date),
+				  #"Inserted start of year" = Table.AddColumn(#"Inserted start of month", "Start of year", each Date.StartOfYear([Dato]), type nullable date),
+				  #"Removed columns" = Table.RemoveColumns(#"Inserted start of year", {"Kvartal", "Dag_i_Uke"}),
+				  #"Changed column type 1" = Table.TransformColumnTypes(#"Removed columns", {{"Ar_Maned", type text}}),
+				  #"Removed columns 1" = Table.RemoveColumns(#"Changed column type 1", {"Ar_Maned"}),
+				  #"Duplicated column" = Table.DuplicateColumn(#"Removed columns 1", "Dato", "Dato - Copy"),
+				  #"Changed column type 2" = Table.TransformColumnTypes(#"Duplicated column", {{"Dato - Copy", type text}}),
+				  #"Added Custom Column" = Table.AddColumn(#"Changed column type 2", "yyyy-mm", each Text.Combine({Date.ToText(Date.From([#"Dato - Copy"]), "yyyy"), "-0", Date.ToText(Date.From([#"Dato - Copy"]), "%d")}), type text),
+				  #"Removed columns 2" = Table.RemoveColumns(#"Added Custom Column", {"Dato - Copy"}),
+				  #"Extracted first characters" = Table.TransformColumns(#"Removed columns 2", {{"Maned_Navn", each Text.Start(_, 3), type text}}),
+				  #"Renamed columns" = Table.RenameColumns(#"Extracted first characters", {{"Maned_Navn", "month"}}),
+				  #"Inserted Replaced Text" = Table.AddColumn(#"Renamed columns", "Column9", each Text.Replace([#"yyyy-mm"], "2024-0", "M"), type text),
+				  #"Renamed columns 1" = Table.RenameColumns(#"Inserted Replaced Text", {{"Column9", "Mnr"}}),
+				  #"Removed columns 3" = Table.RemoveColumns(#"Renamed columns 1", {"Mnr"}),
+				  #"Duplicated column 1" = Table.DuplicateColumn(#"Removed columns 3", "Maned_Nummer", "Maned_Nummer - Copy"),
+				  #"Changed column type 3" = Table.TransformColumnTypes(#"Duplicated column 1", {{"Maned_Nummer - Copy", type text}}),
+				  #"Duplicated column 2" = Table.DuplicateColumn(#"Changed column type 3", "Ar", "Ar - Copy"),
+				  #"Changed column type 4" = Table.TransformColumnTypes(#"Duplicated column 2", {{"Ar - Copy", type text}}),
+				  #"Inserted Merged Column" = Table.AddColumn(#"Changed column type 4", "Merged", each Text.Combine({[#"Ar - Copy"], "-0", [#"Maned_Nummer - Copy"]}), type text),
+				  #"Renamed columns 2" = Table.RenameColumns(#"Inserted Merged Column", {{"yyyy-mm", "yyyy-mmx"}, {"Merged", "yyyy-mm"}}),
+				  #"Removed columns 4" = Table.RemoveColumns(#"Renamed columns 2", {"yyyy-mmx", "Maned_Nummer - Copy", "Ar - Copy"}),
+				  #"Replaced value" = Table.ReplaceValue(#"Removed columns 4", "-010", "-10", Replacer.ReplaceText, {"yyyy-mm"}),
+				  #"Replaced value 1" = Table.ReplaceValue(#"Replaced value", "-011", "-11", Replacer.ReplaceText, {"yyyy-mm"}),
+				  #"Replaced value 2" = Table.ReplaceValue(#"Replaced value 1", "-012", "-12", Replacer.ReplaceText, {"yyyy-mm"})
+				in
+				  #"Replaced value 2"
+
+	annotation PBI_ResultType = Table
+

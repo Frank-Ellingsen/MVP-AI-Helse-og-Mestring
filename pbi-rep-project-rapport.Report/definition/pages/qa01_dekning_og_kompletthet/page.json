@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "qa01_dekning_og_kompletthet",
+  "displayName": "DQA 1: Dekning & Kompletthet (Data Coverage)",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "v_qa01_slicer",
+      "target": "v_qa01_kpi_2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "v_qa01_slicer",
+      "target": "v_qa01_kpi_3",
+      "type": "DataFilter"
+    },
+    {
+      "source": "v_qa01_slicer",
+      "target": "v_qa01_kpi_4",
+      "type": "DataFilter"
+    },
+    {
+      "source": "v_qa01_slicer",
+      "target": "v_qa01_table_coverage",
+      "type": "DataFilter"
+    },
+    {
+      "source": "v_qa01_slicer",
+      "target": "v_qa01_banner",
+      "type": "DataFilter"
+    }
+  ]
+}
